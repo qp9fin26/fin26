@@ -997,28 +997,55 @@ function renderChits() {
 function renderChitChart() {
   if (charts.chit) charts.chit.destroy();
   const ctx = document.getElementById('chitChart').getContext('2d');
-  // By end of Dec 2026: CF1 = month 13 of 30, CF2 = month 11 of 20
-  const cf1Done = CHIT_INFO[0].paid + 10; // 3 + 10 = 13
-  const cf2Done = CHIT_INFO[1].paid + 10; // 1 + 10 = 11
+  // CF1: 3 months already paid before app. Add any logged payments from expense log
+  // CF2: 1 month already paid before app. Add any logged payments from expense log
+  const cf1Logged = entries.filter(e => e.cat === 'Chit Fund 1').length;
+  const cf2Logged = entries.filter(e => e.cat === 'Chit Fund 2').length;
+  const cf1Paid = CHIT_INFO[0].paid + cf1Logged;
+  const cf2Paid = CHIT_INFO[1].paid + cf2Logged;
+  const cf1Total = CHIT_INFO[0].dur;     // 30
+  const cf2Total = CHIT_INFO[1].dur;     // 20
+
   charts.chit = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Chit Fund 1 (30mo)', 'Chit Fund 2 (20mo)'],
+      labels: [
+        `CF1 — Month ${cf1Paid} paid of ${cf1Total}`,
+        `CF2 — Month ${cf2Paid} paid of ${cf2Total}`
+      ],
       datasets: [
-        {label:'Months Paid', data:[cf1Done, cf2Done],
-         backgroundColor:'rgba(45,212,191,.7)', borderColor:'rgba(45,212,191,1)', borderWidth:1, borderRadius:6},
-        {label:'Months Remaining', data:[30-cf1Done, 20-cf2Done],
-         backgroundColor:'rgba(255,255,255,.08)', borderColor:'rgba(255,255,255,.2)', borderWidth:1, borderRadius:6},
+        {
+          label:'Months Paid',
+          data:[cf1Paid, cf2Paid],
+          backgroundColor:'rgba(45,212,191,.8)',
+          borderColor:'rgba(45,212,191,1)',
+          borderWidth:1, borderRadius:6
+        },
+        {
+          label:'Months Remaining',
+          data:[cf1Total - cf1Paid, cf2Total - cf2Paid],
+          backgroundColor:'rgba(255,255,255,.08)',
+          borderColor:'rgba(255,255,255,.15)',
+          borderWidth:1, borderRadius:6
+        },
       ]
     },
     options: {
       responsive:true, maintainAspectRatio:false,
       indexAxis:'y',
-      plugins:{legend:{labels:{color:'#8892aa',font:{size:10}}}},
+      plugins:{
+        legend:{labels:{color:'#8892aa',font:{size:10}}},
+        tooltip:{callbacks:{
+          label: ctx => ` ${ctx.dataset.label}: ${ctx.raw} months`
+        }}
+      },
       scales:{
-        x:{stacked:true, ticks:{color:'#8892aa',font:{size:10}}, grid:{color:'rgba(255,255,255,.05)'},
-           max:30},
-        y:{stacked:true, ticks:{color:'#8892aa',font:{size:10}}, grid:{color:'rgba(255,255,255,.05)'}}
+        x:{stacked:true, max:30,
+           ticks:{color:'#8892aa',font:{size:10}},
+           grid:{color:'rgba(255,255,255,.05)'}},
+        y:{stacked:true,
+           ticks:{color:'#8892aa',font:{size:9}},
+           grid:{color:'rgba(255,255,255,.05)'}}
       }
     }
   });
