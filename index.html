@@ -818,15 +818,15 @@ function renderGoals() {
   if(charts.debt) charts.debt.destroy();
   const debtPlanCum=[], debtActCum=[];
   let dp=cbOB+caOB, da=cbOB+caOB;
+  let hasAnyDebt=false;
   MONTHS.forEach((m,i)=>{
     const p=PLAN[m]; const a=getActuals(m);
     dp -= p["Card B Payment"]+p["Card A Payment"];
     const actPayment=(a["Card B Payment"]||0)+(a["Card A Payment"]||0);
     const actSpend=(a["Card B Spend"]||0)+(a["Card A Spend"]||0);
-    const actDebt = actPayment - actSpend;
-    if(actPayment>0||actSpend>0) { hasAnyDebt=true; da=da-actPayment+actSpend; }
-    debtPlanCum.push(Math.max(0,dp));
-    debtActCum.push(da<35000?Math.max(0,da):null);
+    if(actPayment>0||actSpend>0){ hasAnyDebt=true; da=da-actPayment+actSpend; }
+    debtPlanCum.push(Math.max(0,Math.round(dp)));
+    debtActCum.push(hasAnyDebt?Math.max(0,Math.round(da)):null);
   });
   charts.debt = new Chart(document.getElementById('debtChart').getContext('2d'),{
     type:'line',
@@ -1025,8 +1025,10 @@ function renderChitChart() {
   if (charts.chit) charts.chit.destroy();
   const ctx = document.getElementById('chitChart').getContext('2d');
   // By end of Dec 2026: CF1 = month 13 of 30, CF2 = month 11 of 20
-  const cf1Done = CHIT_INFO[0].paid + 10; // 3 + 10 = 13
-  const cf2Done = CHIT_INFO[1].paid + 10; // 1 + 10 = 11
+  const cf1Logged = entries.filter(e=>e.cat==='Chit Fund 1').length;
+  const cf2Logged = entries.filter(e=>e.cat==='Chit Fund 2').length;
+  const cf1Done = CHIT_INFO[0].paid + cf1Logged;
+  const cf2Done = CHIT_INFO[1].paid + cf2Logged;
   charts.chit = new Chart(ctx, {
     type: 'bar',
     data: {
