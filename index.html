@@ -292,6 +292,19 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 <!-- GOALS -->
 <div class="page" id="page-goals">
   <div class="sec-lbl">Credit Card Payoff</div>
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-hdr"><div class="card-title">Opening Balances — Edit if needed</div></div>
+    <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <div class="form-lbl">Card B (AED)</div>
+        <input type="number" class="form-input" id="cbOB" inputmode="decimal" placeholder="15000" onchange="saveCCOB('B',this.value);renderGoals()">
+      </div>
+      <div>
+        <div class="form-lbl">Card A (AED)</div>
+        <input type="number" class="form-input" id="caOB" inputmode="decimal" placeholder="20000" onchange="saveCCOB('A',this.value);renderGoals()">
+      </div>
+    </div>
+  </div>
   <div id="ccGoals"></div>
   <div class="sec-lbl">Wedding Fund</div>
   <div id="wedGoal"></div>
@@ -397,17 +410,21 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
   <div class="sec-lbl" style="margin-top:16px">10-Month Timeline</div>
   <div id="timeline"></div>
   <div class="sec-lbl" style="margin-top:16px">Data & Backup</div>
-  <button class="export-btn" onclick="exportData()">⬇ Export All Entries (Backup)</button>
-  <button class="export-btn" onclick="exportCSV()">⬇ Export as CSV for Excel</button>
-  <button class="export-btn" style="color:var(--gold);border-color:rgba(212,168,67,.4)" onclick="document.getElementById('importFile').click()">⬆ Import from CSV (Restore)</button>
-  <input type="file" id="importFile" accept=".csv,.txt" style="display:none" onchange="importCSV(event)">
-  <button class="danger-btn" onclick="clearData()">⚠ Clear All Data</button>
+  <button class="export-btn" onclick="exportText()">⬇ Export — Copy to Notes / WhatsApp</button>
+  <button class="export-btn" style="color:var(--gold);border-color:rgba(212,168,67,.4)" onclick="showImportBox()">⬆ Import — Paste your backup text</button>
+  <div id="importBox" style="display:none;margin-top:10px">
+    <div class="form-lbl" style="margin-bottom:6px">Paste your exported text below then tap Import</div>
+    <textarea id="importText" class="form-input" rows="6" style="resize:vertical;font-size:11px;line-height:1.5" placeholder="Paste your backup text here..."></textarea>
+    <button class="submit-btn" style="margin-top:8px" onclick="importFromText()">⬆ Import Now</button>
+    <button class="export-btn" style="margin-top:6px" onclick="document.getElementById('importBox').style.display='none'">Cancel</button>
+  </div>
+  <button class="danger-btn" style="margin-top:10px" onclick="clearData()">⚠ Clear All Data</button>
   <div style="margin-top:20px;padding:16px;background:var(--s1);border:1px solid var(--border);border-radius:14px;font-size:9px;color:var(--text3);line-height:1.7">
     <div style="color:var(--gold);font-size:10px;font-weight:600;margin-bottom:6px">DATA SAFETY</div>
     Your data is stored in this browser's local storage. To prevent loss:<br>
-    1. Export CSV weekly after your review<br>
-    2. Save the CSV to Notes or WhatsApp Saved Messages<br>
-    3. If URL changes — import that CSV into the new app instantly<br>
+    1. Tap Export → share to WhatsApp Saved Messages or Notes<br>
+    2. If URL changes — tap Import → paste the text → done<br>
+    3. Always open from home screen icon, not by typing URL<br>
     4. Do NOT clear Safari website data in iPhone Settings<br><br>
     <span style="color:var(--teal)">Forex rate: 1 INR = AED 0.0408</span>
   </div>
@@ -416,7 +433,7 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 <script>
 // ── DATA ────────────────────────────────────────────────────────
 const MONTHS = ["Mar 2026", "Apr 2026", "May 2026", "Jun 2026", "Jul 2026", "Aug 2026", "Sep 2026", "Oct 2026", "Nov 2026", "Dec 2026"];
-const CATS = ["Primary Salary", "Secondary Income", "H-Topup Allowance", "Rent", "Food", "Shopping & Entertainment", "Transport & Utilities", "Remittance to India", "Chit Fund 1", "Chit Fund 2", "Card B Payment", "Card A Payment", "Emergency Buffer", "Wedding Fund", "H-Topup Expense"];
+const CATS = ["Primary Salary", "Secondary Income", "H-Topup Allowance", "Rent", "Food", "Shopping & Entertainment", "Transport & Utilities", "Remittance to India", "Chit Fund 1", "Chit Fund 2", "Card B Payment", "Card A Payment", "Card B Spend", "Card A Spend", "Emergency Buffer", "Wedding Fund", "H-Topup Expense", "Unplanned Expenses"];
 const PLAN = {"Mar 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Apr 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"May 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Jun 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Jul 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Aug 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Sep 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280},"Oct 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280},"Nov 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280},"Dec 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280}};
 const FOREX = 24.5;
 const INCOME_CATS = ["Primary Salary","Secondary Income","H-Topup Allowance"];
@@ -429,6 +446,7 @@ let selMonth = 0;
 let entries  = JSON.parse(localStorage.getItem('bgt_entries') || '[]');
 let balances = JSON.parse(localStorage.getItem('bgt_balances') || '{}');
 let openingBal = parseFloat(localStorage.getItem('bgt_ob') || '0');
+let ccOpeningBal = JSON.parse(localStorage.getItem('bgt_ccob') || '{"B":15000,"A":20000}');
 let charts = {};
 
 // ── HELPERS ─────────────────────────────────────────────────────
@@ -589,19 +607,23 @@ function renderOverview() {
 
   // Mini goals
   const cum = getCumActuals(selMonth);
-  const debtCleared = Math.min(35000, (cum["Card B Payment"]||0)+(cum["Card A Payment"]||0));
+  const cbOB = ccOpeningBal.B||15000, caOB = ccOpeningBal.A||20000;
+  const cbBal = Math.max(0,cbOB-(cum["Card B Payment"]||0)+(cum["Card B Spend"]||0));
+  const caBal = Math.max(0,caOB-(cum["Card A Payment"]||0)+(cum["Card A Spend"]||0));
+  const debtCleared = (cbOB-cbBal)+(caOB-caBal);
+  const totalDebtOB = cbOB+caOB;
   const wedSaved = cum["Wedding Fund"]||0;
-  const debtPct = Math.min(100, Math.round(debtCleared/350));
+  const debtPct = Math.min(100, Math.round(debtCleared/totalDebtOB*100));
   const wedPct = Math.min(100, Math.round(wedSaved/640));
 
   document.getElementById('miniGoals').innerHTML = `
     <div class="prog-card">
       <div class="prog-top">
-        <div><div class="prog-name">Debt Cleared</div><div class="prog-sub">AED ${fmt(debtCleared)} of 35,000</div></div>
+        <div><div class="prog-name">Debt Cleared</div><div class="prog-sub">AED ${fmt(debtCleared)} of ${fmt(totalDebtOB)}</div></div>
         <div class="prog-pct" style="color:var(--orange)">${debtPct}%</div>
       </div>
       <div class="prog-bg"><div class="prog-fill debt" style="width:${debtPct}%"></div></div>
-      <div class="prog-nums"><span>AED ${fmt(debtCleared)} cleared</span><span>AED 35,000</span></div>
+      <div class="prog-nums"><span>AED ${fmt(debtCleared)} cleared</span><span>AED ${fmt(totalDebtOB)}</span></div>
     </div>
     <div class="prog-card">
       <div class="prog-top">
@@ -704,41 +726,44 @@ function renderBreakdown() {
 
 // ── GOALS ───────────────────────────────────────────────────────
 function renderGoals() {
-  // Cumulative up to selected month
   const cum = getCumActuals(selMonth);
 
-  // Plan cumulatives
-  let cumPlanDebt=0, cumPlanWed=0, cumPlanBuf=0, cumPlanCB=0, cumPlanCA=0;
-  for(let i=0;i<=selMonth;i++){
-    const p=PLAN[MONTHS[i]];
-    cumPlanDebt+=p["Card B Payment"]+p["Card A Payment"];
-    cumPlanWed+=p["Wedding Fund"];
-    cumPlanBuf+=p["Emergency Buffer"];
-    cumPlanCB+=p["Card B Payment"];
-    cumPlanCA+=p["Card A Payment"];
-  }
+  // CC opening balances
+  const cbOB = ccOpeningBal.B || 15000;
+  const caOB = ccOpeningBal.A || 20000;
 
-  const cbCleared = Math.min(15000, cum["Card B Payment"]||0);
-  const caCleared = Math.min(20000, cum["Card A Payment"]||0);
-  const cbPct = Math.min(100,Math.round(cbCleared/150));
-  const caPct = Math.min(100,Math.round(caCleared/200));
+  // Populate input fields
+  const cbInp = document.getElementById('cbOB');
+  const caInp = document.getElementById('caOB');
+  if(cbInp && !cbInp.value) cbInp.value = cbOB;
+  if(caInp && !caInp.value) caInp.value = caOB;
+
+  // Balance = opening - payments + new spends
+  const cbBal = Math.max(0, cbOB - (cum["Card B Payment"]||0) + (cum["Card B Spend"]||0));
+  const caBal = Math.max(0, caOB - (cum["Card A Payment"]||0) + (cum["Card A Spend"]||0));
+  const cbPct = Math.min(100, Math.round((cbOB-cbBal)/cbOB*100));
+  const caPct = Math.min(100, Math.round((caOB-caBal)/caOB*100));
+  const cbSpendNote = (cum["Card B Spend"]||0)>0 ? ` · +AED ${fmt(cum["Card B Spend"]||0)} new spend` : '';
+  const caSpendNote = (cum["Card A Spend"]||0)>0 ? ` · +AED ${fmt(cum["Card A Spend"]||0)} new spend` : '';
 
   document.getElementById('ccGoals').innerHTML = `
     <div class="prog-card">
       <div class="prog-top">
-        <div><div class="prog-name">Card B — AED 15,000</div><div class="prog-sub">AED 3,000/mo · clears June 2026</div></div>
+        <div><div class="prog-name">Card B — Opening: AED ${fmt(cbOB)}</div>
+        <div class="prog-sub">Paid: AED ${fmt(cum["Card B Payment"]||0)}${cbSpendNote} · Balance: AED ${fmt(cbBal)}</div></div>
         <div class="prog-pct" style="color:var(--orange)">${cbPct}%</div>
       </div>
       <div class="prog-bg"><div class="prog-fill debt" style="width:${cbPct}%"></div></div>
-      <div class="prog-nums"><span>AED ${fmt(cbCleared)} cleared</span><span>AED 15,000</span></div>
+      <div class="prog-nums"><span>AED ${fmt(cbOB-cbBal)} cleared</span><span>AED ${fmt(cbOB)}</span></div>
     </div>
     <div class="prog-card">
       <div class="prog-top">
-        <div><div class="prog-name">Card A — AED 20,000</div><div class="prog-sub">AED 3,000/mo · clears August 2026</div></div>
+        <div><div class="prog-name">Card A — Opening: AED ${fmt(caOB)}</div>
+        <div class="prog-sub">Paid: AED ${fmt(cum["Card A Payment"]||0)}${caSpendNote} · Balance: AED ${fmt(caBal)}</div></div>
         <div class="prog-pct" style="color:var(--orange)">${caPct}%</div>
       </div>
       <div class="prog-bg"><div class="prog-fill debt" style="width:${caPct}%"></div></div>
-      <div class="prog-nums"><span>AED ${fmt(caCleared)} cleared</span><span>AED 20,000</span></div>
+      <div class="prog-nums"><span>AED ${fmt(caOB-caBal)} cleared</span><span>AED ${fmt(caOB)}</span></div>
     </div>`;
 
   const wedSaved = cum["Wedding Fund"]||0;
@@ -792,12 +817,14 @@ function renderGoals() {
   // Debt chart
   if(charts.debt) charts.debt.destroy();
   const debtPlanCum=[], debtActCum=[];
-  let dp=35000, da=35000;
+  let dp=cbOB+caOB, da=cbOB+caOB;
   MONTHS.forEach((m,i)=>{
     const p=PLAN[m]; const a=getActuals(m);
     dp -= p["Card B Payment"]+p["Card A Payment"];
-    const actDebt=(a["Card B Payment"]||0)+(a["Card A Payment"]||0);
-    if(actDebt>0) da-=actDebt;
+    const actPayment=(a["Card B Payment"]||0)+(a["Card A Payment"]||0);
+    const actSpend=(a["Card B Spend"]||0)+(a["Card A Spend"]||0);
+    const actDebt = actPayment - actSpend;
+    if(actPayment>0||actSpend>0) { hasAnyDebt=true; da=da-actPayment+actSpend; }
     debtPlanCum.push(Math.max(0,dp));
     debtActCum.push(da<35000?Math.max(0,da):null);
   });
@@ -1161,29 +1188,26 @@ function toggleTL(i) {
   c.classList.toggle('open', open);
 }
 
-// ── EXPORT ──────────────────────────────────────────────────────
-function shareOrCopy(title, text, filename) {
-  // Try native share first (shows WhatsApp, Notes, Mail etc on iPhone)
+// ── EXPORT / IMPORT ─────────────────────────────────────────────
+function exportText() {
+  if (entries.length === 0) { alert('No entries to export yet.'); return; }
+  const rows = ['Date,Description,Category,Amount,Month'];
+  entries.forEach(e => {
+    const desc = (e.desc||'').replace(/"/g,'""');
+    rows.push(`${e.date},"${desc}","${e.cat}",${e.amt},"${e.month||''}"`);
+  });
+  const text = rows.join('\n');
   if (navigator.share) {
-    navigator.share({title, text})
-      .then(() => {})
-      .catch(() => {
-        // If share fails, fallback to clipboard copy
-        copyToClipboard(text);
-      });
-  } else {
-    copyToClipboard(text);
-  }
+    navigator.share({title:'Budget 2026 Backup', text}).then(()=>{}).catch(()=>copyText(text));
+  } else { copyText(text); }
 }
 
-function copyToClipboard(text) {
+function copyText(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text)
-      .then(() => alert('✅ Copied to clipboard!\nPaste it into Notes or WhatsApp Saved Messages.'))
+      .then(() => alert('✅ Copied!\nPaste into WhatsApp Saved Messages or Notes.'))
       .catch(() => fallbackCopy(text));
-  } else {
-    fallbackCopy(text);
-  }
+  } else { fallbackCopy(text); }
 }
 
 function fallbackCopy(text) {
@@ -1192,99 +1216,80 @@ function fallbackCopy(text) {
   ta.style.cssText = 'position:fixed;top:0;left:0;opacity:0;font-size:16px';
   document.body.appendChild(ta);
   ta.focus(); ta.select();
-  try {
-    document.execCommand('copy');
-    alert('✅ Copied to clipboard!\nPaste it into Notes or WhatsApp Saved Messages.');
-  } catch(e) {
-    alert('Could not copy automatically.\nPlease manually select and copy the text below:\n\n' + text.substring(0, 300) + '...');
-  }
+  try { document.execCommand('copy'); alert('✅ Copied!\nPaste into WhatsApp Saved Messages or Notes.'); }
+  catch(e) { alert('Please manually copy your backup.'); }
   document.body.removeChild(ta);
 }
 
-function exportData() {
-  if (entries.length === 0) { alert('No entries to export yet.'); return; }
-  const lines = ['BUDGET 2026 — DATA EXPORT', new Date().toLocaleString(), '', 'TRANSACTIONS:'];
-  entries.forEach(e => lines.push(`${e.date}|${e.month}|${e.cat}|${e.amt}|${e.desc||''}`));
-  lines.push('', 'ACCOUNT BALANCES:');
-  Object.entries(balances).forEach(([k,v]) => lines.push(`Month ${k}: AED ${v}`));
-  shareOrCopy('Budget 2026 Backup', lines.join('\n'), 'budget_backup.txt');
+function showImportBox() {
+  const box = document.getElementById('importBox');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  if (box.style.display === 'block') {
+    document.getElementById('importText').value = '';
+    document.getElementById('importText').focus();
+  }
 }
 
-function exportCSV() {
-  if (entries.length === 0) { alert('No entries to export yet.'); return; }
-  const rows = ['Date,Description,Category,Amount,Month'];
-  entries.forEach(e => rows.push(`${e.date},"${(e.desc||'').replace(/"/g,'""')}","${e.cat}",${e.amt},"${e.month||''}"`));
-  shareOrCopy('Budget 2026 CSV', rows.join('\n'), 'budget_2026.csv');
+function parseCSVLine(line) {
+  const cols = []; let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') { if (inQ && line[i+1]==='"') { cur+='"'; i++; } else inQ=!inQ; }
+    else if (ch === ',' && !inQ) { cols.push(cur.trim().replace(/^"|"$/g,'')); cur=''; }
+    else cur += ch;
+  }
+  cols.push(cur.trim().replace(/^"|"$/g,''));
+  return cols;
 }
 
-function importCSV(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
+function importFromText() {
+  const raw = document.getElementById('importText').value.trim();
+  if (!raw) { alert('Please paste your backup text first.'); return; }
+  const lines = raw.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n').filter(l=>l.trim());
+  if (!lines.length) { alert('No data found.'); return; }
+  const dataLines = lines[0].toLowerCase().startsWith('date') ? lines.slice(1) : lines;
+  if (!dataLines.length) { alert('No data rows found.'); return; }
+  let imported=0, skipped=0, errors=0;
+  const newEntries = [];
+  dataLines.forEach((line,idx) => {
+    if (!line.trim()) return;
     try {
-      const lines = e.target.result.split('\n').filter(l => l.trim());
-      // Skip header row
-      const dataLines = lines[0].startsWith('Date') ? lines.slice(1) : lines;
-      let imported = 0, skipped = 0;
-      const newEntries = [];
-      dataLines.forEach(line => {
-        if (!line.trim()) return;
-        // Parse CSV properly handling quoted fields
-        const cols = [];
-        let cur = '', inQuote = false;
-        for (let i = 0; i < line.length; i++) {
-          if (line[i] === '"') { inQuote = !inQuote; }
-          else if (line[i] === ',' && !inQuote) { cols.push(cur.trim()); cur = ''; }
-          else cur += line[i];
-        }
-        cols.push(cur.trim());
-        const [date, desc, cat, amt, month] = cols;
-        if (!date || !cat || !amt) { skipped++; return; }
-        const parsedAmt = parseFloat(amt);
-        if (isNaN(parsedAmt) || parsedAmt <= 0) { skipped++; return; }
-        // Check if entry already exists (same date + cat + amt)
-        const exists = entries.some(ex => ex.date===date && ex.cat===cat && ex.amt===parsedAmt);
-        if (exists) { skipped++; return; }
-        newEntries.push({
-          id: Date.now() + imported,
-          date: date.trim(),
-          desc: (desc||'').replace(/""/g,'"'),
-          cat: cat.trim(),
-          amt: parsedAmt,
-          month: month ? month.trim() : entryMonth(date.trim())
-        });
-        imported++;
-      });
-      if (newEntries.length === 0) {
-        alert('No new entries found to import.\n' + skipped + ' duplicate or invalid rows skipped.');
-        return;
-      }
-      entries = [...entries, ...newEntries];
-      // Sort by date descending
-      entries.sort((a,b) => new Date(b.date) - new Date(a.date));
-      save();
-      renderLog(); renderOverview(); renderBreakdown(); renderGoals(); renderAccount();
-      alert('✅ Import successful!\n' + imported + ' entries imported.\n' + skipped + ' duplicates/invalid skipped.');
-    } catch(err) {
-      alert('Import failed. Make sure you are using a CSV exported from this app.\n\nError: ' + err.message);
-    }
-    // Reset file input so same file can be imported again if needed
-    event.target.value = '';
-  };
-  reader.readAsText(file);
+      const cols = parseCSVLine(line);
+      if (cols.length < 4) { errors++; return; }
+      const date=cols[0].trim(), desc=cols[1].trim(), cat=cols[2].trim();
+      const amt=parseFloat(cols[3]);
+      const month=cols[4]?cols[4].trim():entryMonth(date);
+      if (!date||!cat||isNaN(amt)||amt<=0) { errors++; return; }
+      const isDup = entries.some(ex=>ex.date===date&&ex.cat===cat&&Math.abs(ex.amt-amt)<0.01);
+      if (isDup) { skipped++; return; }
+      newEntries.push({id:Date.now()+imported+idx, date, desc, cat, amt, month:month||entryMonth(date)});
+      imported++;
+    } catch(e) { errors++; }
+  });
+  if (imported===0) { alert(`Nothing imported.\n• ${skipped} duplicates\n• ${errors} invalid rows`); return; }
+  entries = [...entries, ...newEntries];
+  entries.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  save();
+  renderLog(); renderOverview(); renderBreakdown(); renderGoals(); renderAccount();
+  document.getElementById('importText').value='';
+  document.getElementById('importBox').style.display='none';
+  alert(`✅ Import successful!\n• ${imported} entries imported\n• ${skipped} duplicates skipped\n• ${errors} invalid rows ignored`);
+}
+
+// ── CC OPENING BALANCE ───────────────────────────────────────────
+function saveCCOB(card, val) {
+  ccOpeningBal[card] = parseFloat(val) || (card==='B' ? 15000 : 20000);
+  localStorage.setItem('bgt_ccob', JSON.stringify(ccOpeningBal));
 }
 
 function clearData() {
   const total = entries.length;
-  if (!confirm(`⚠️ CLEAR ALL DATA?\n\nYou have ${total} transaction${total!==1?'s':''} saved.\n\nThis will permanently delete:\n• All ${total} transactions\n• All account balances\n• All chit fund win records\n\nHave you exported a backup?\n\nTap OK only if you are sure.`)) return;
-  entries = []; balances = {}; chitWins = [];
-  localStorage.removeItem('bgt_entries');
-  localStorage.removeItem('bgt_balances');
-  localStorage.removeItem('bgt_ob');
-  localStorage.removeItem('bgt_chitwins');
-  document.getElementById('openingBal').value = '';
-  openingBal = 0;
+  if (!confirm(`⚠️ CLEAR ALL DATA?\n\nYou have ${total} transaction${total!==1?'s':''} saved.\n\nThis will permanently delete everything.\n\nHave you exported a backup?\n\nTap OK only if you are sure.`)) return;
+  entries=[]; balances={}; chitWins=[]; ccOpeningBal={"B":15000,"A":20000};
+  localStorage.removeItem('bgt_entries'); localStorage.removeItem('bgt_balances');
+  localStorage.removeItem('bgt_ob'); localStorage.removeItem('bgt_chitwins');
+  localStorage.removeItem('bgt_ccob');
+  document.getElementById('openingBal').value=''; openingBal=0;
   renderLog(); renderOverview(); renderBreakdown(); renderGoals(); renderAccount(); renderChitWinHistory();
   alert('✅ All data cleared.');
 }
