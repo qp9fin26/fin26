@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -39,32 +40,32 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 
 /* HEADER */
 .hdr{
-  position:sticky;top:0;z-index:200;
-  background:rgba(10,12,16,0.95);
-  border-bottom:1px solid var(--border);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  padding:calc(var(--safe-top) + 12px) 16px 0;
+position:sticky;top:0;z-index:200;
+background:rgba(10,12,16,0.95);
+border-bottom:1px solid var(–border);
+backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+padding:calc(var(–safe-top) + 12px) 16px 0;
 }
 .hdr-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
-.hdr-title{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px}
-.hdr-title span{color:var(--gold)}
-.hdr-badge{background:var(--gold);color:#000;font-size:9px;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:1px}
+.hdr-title{font-family:‘Clash Display’,sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.hdr-title span{color:var(–gold)}
+.hdr-badge{background:var(–gold);color:#000;font-size:9px;font-weight:600;padding:4px 10px;border-radius:20px;letter-spacing:1px}
 
 /* MONTH PILLS */
 .month-row{display:flex;gap:6px;overflow-x:auto;padding-bottom:10px;scrollbar-width:none}
 .month-row::-webkit-scrollbar{display:none}
-.mpill{flex-shrink:0;padding:6px 13px;border-radius:20px;font-size:10px;font-weight:500;border:1px solid var(--border);color:var(--text2);cursor:pointer;transition:all .2s;letter-spacing:.3px}
+.mpill{flex-shrink:0;padding:6px 13px;border-radius:20px;font-size:10px;font-weight:500;border:1px solid var(–border);color:var(–text2);cursor:pointer;transition:all .2s;letter-spacing:.3px}
 .mpill.p1{border-color:rgba(29,78,216,.5)}
 .mpill.p2{border-color:rgba(21,128,61,.5)}
-.mpill.active.p1{background:var(--phase1);color:#fff;border-color:var(--phase1)}
-.mpill.active.p2{background:var(--phase2);color:#fff;border-color:var(--phase2)}
+.mpill.active.p1{background:var(–phase1);color:#fff;border-color:var(–phase1)}
+.mpill.active.p2{background:var(–phase2);color:#fff;border-color:var(–phase2)}
 
 /* NAV */
-.nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(10,12,16,.97);border-top:1px solid var(--border);padding:8px 0 calc(8px + var(--safe-bot));display:flex;backdrop-filter:blur(20px)}
+.nav{position:fixed;bottom:0;left:0;right:0;z-index:200;background:rgba(10,12,16,.97);border-top:1px solid var(–border);padding:8px 0 calc(8px + var(–safe-bot));display:flex;backdrop-filter:blur(20px)}
 .ni{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer;padding:4px 0}
 .ni-icon{font-size:19px;transition:transform .2s}
-.ni-lbl{font-size:8px;letter-spacing:.8px;text-transform:uppercase;color:var(--text3);transition:color .2s}
-.ni.active .ni-lbl{color:var(--gold)}
+.ni-lbl{font-size:8px;letter-spacing:.8px;text-transform:uppercase;color:var(–text3);transition:color .2s}
+.ni.active .ni-lbl{color:var(–gold)}
 .ni.active .ni-icon{transform:scale(1.15)}
 .ni:active .ni-icon{transform:scale(.9)}
 
@@ -74,40 +75,40 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 @keyframes fadeUp{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
 
 /* CARDS */
-.card{background:var(--s1);border:1px solid var(--border);border-radius:16px;overflow:hidden;margin-bottom:12px}
-.card-hdr{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center}
-.card-title{font-family:'Clash Display',sans-serif;font-size:13px;font-weight:600;letter-spacing:.3px}
+.card{background:var(–s1);border:1px solid var(–border);border-radius:16px;overflow:hidden;margin-bottom:12px}
+.card-hdr{padding:12px 16px;border-bottom:1px solid var(–border);display:flex;justify-content:space-between;align-items:center}
+.card-title{font-family:‘Clash Display’,sans-serif;font-size:13px;font-weight:600;letter-spacing:.3px}
 .card-body{padding:14px 16px}
 
 /* SECTION LABEL */
-.sec-lbl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);margin:16px 0 8px;padding-left:2px}
+.sec-lbl{font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(–text3);margin:16px 0 8px;padding-left:2px}
 
 /* STAT GRID */
 .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px}
-.stat{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:14px;position:relative;overflow:hidden}
-.stat::after{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0}
-.stat.income::after{background:var(--green)}
-.stat.expense::after{background:var(--red)}
-.stat.debt::after{background:var(--orange)}
-.stat.save::after{background:var(--teal)}
-.stat.htopup::after{background:var(--purple)}
-.stat-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
-.stat-val{font-family:'Clash Display',sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px}
-.stat.income .stat-val{color:var(--green)}
-.stat.expense .stat-val{color:var(--red)}
-.stat.debt .stat-val{color:var(--orange)}
-.stat.save .stat-val{color:var(--teal)}
-.stat.htopup .stat-val{color:var(--purple)}
-.stat-sub{font-size:9px;color:var(--text3);margin-top:3px}
+.stat{background:var(–s1);border:1px solid var(–border);border-radius:14px;padding:14px;position:relative;overflow:hidden}
+.stat::after{content:’’;position:absolute;top:0;left:0;right:0;height:2px;border-radius:2px 2px 0 0}
+.stat.income::after{background:var(–green)}
+.stat.expense::after{background:var(–red)}
+.stat.debt::after{background:var(–orange)}
+.stat.save::after{background:var(–teal)}
+.stat.htopup::after{background:var(–purple)}
+.stat-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(–text3);margin-bottom:6px}
+.stat-val{font-family:‘Clash Display’,sans-serif;font-size:22px;font-weight:700;letter-spacing:-0.5px}
+.stat.income .stat-val{color:var(–green)}
+.stat.expense .stat-val{color:var(–red)}
+.stat.debt .stat-val{color:var(–orange)}
+.stat.save .stat-val{color:var(–teal)}
+.stat.htopup .stat-val{color:var(–purple)}
+.stat-sub{font-size:9px;color:var(–text3);margin-top:3px}
 
 /* NET CARD */
-.net-card{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
-.net-left .net-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(--text3)}
-.net-left .net-sub{font-size:9px;color:var(--text3);margin-top:2px}
-.net-val{font-family:'Clash Display',sans-serif;font-size:26px;font-weight:700}
-.net-val.pos{color:var(--green)}
-.net-val.tight{color:var(--gold)}
-.net-val.neg{color:var(--red)}
+.net-card{background:var(–s1);border:1px solid var(–border);border-radius:14px;padding:14px 16px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center}
+.net-left .net-lbl{font-size:10px;text-transform:uppercase;letter-spacing:.8px;color:var(–text3)}
+.net-left .net-sub{font-size:9px;color:var(–text3);margin-top:2px}
+.net-val{font-family:‘Clash Display’,sans-serif;font-size:26px;font-weight:700}
+.net-val.pos{color:var(–green)}
+.net-val.tight{color:var(–gold)}
+.net-val.neg{color:var(–red)}
 
 /* PHASE BANNER */
 .phase-tag{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:20px;font-size:10px;font-weight:500;letter-spacing:.5px;margin-bottom:12px}
@@ -118,138 +119,139 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 .phase-tag.p2 .phase-dot{background:#4ade80}
 
 /* PROGRESS */
-.prog-card{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:14px 16px;margin-bottom:10px}
+.prog-card{background:var(–s1);border:1px solid var(–border);border-radius:14px;padding:14px 16px;margin-bottom:10px}
 .prog-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:10px}
 .prog-name{font-size:12px;font-weight:500}
-.prog-sub{font-size:9px;color:var(--text3);margin-top:2px}
-.prog-pct{font-family:'Clash Display',sans-serif;font-size:16px;font-weight:700}
-.prog-bg{height:8px;background:var(--s3);border-radius:4px;overflow:hidden;margin-bottom:6px}
+.prog-sub{font-size:9px;color:var(–text3);margin-top:2px}
+.prog-pct{font-family:‘Clash Display’,sans-serif;font-size:16px;font-weight:700}
+.prog-bg{height:8px;background:var(–s3);border-radius:4px;overflow:hidden;margin-bottom:6px}
 .prog-fill{height:100%;border-radius:4px;transition:width .7s cubic-bezier(.4,0,.2,1)}
 .prog-fill.debt{background:linear-gradient(90deg,#f87171,#fb923c)}
 .prog-fill.wed{background:linear-gradient(90deg,#2dd4bf,#60a5fa)}
 .prog-fill.buf{background:linear-gradient(90deg,#4ade80,#2dd4bf)}
-.prog-nums{display:flex;justify-content:space-between;font-size:9px;color:var(--text3)}
+.prog-nums{display:flex;justify-content:space-between;font-size:9px;color:var(–text3)}
 
 /* BREAKDOWN TABLE */
-.bk-section{background:var(--s2);padding:7px 16px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(--text3);border-bottom:1px solid var(--border)}
-.bk-row{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border)}
+.bk-section{background:var(–s2);padding:7px 16px;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:var(–text3);border-bottom:1px solid var(–border)}
+.bk-row{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(–border)}
 .bk-row:last-child{border-bottom:none}
 .bk-left .bk-name{font-size:11px}
-.bk-left .bk-note{font-size:9px;color:var(--text3);margin-top:2px}
+.bk-left .bk-note{font-size:9px;color:var(–text3);margin-top:2px}
 .bk-right{text-align:right}
-.bk-plan{font-size:11px;color:var(--text2)}
+.bk-plan{font-size:11px;color:var(–text2)}
 .bk-actual{font-size:12px;font-weight:600;margin-top:1px}
-.bk-actual.g{color:var(--green)}
-.bk-actual.r{color:var(--red)}
-.bk-actual.o{color:var(--orange)}
-.bk-actual.t{color:var(--teal)}
-.bk-actual.pu{color:var(--purple)}
-.bk-actual.y{color:var(--gold)}
-.bk-total-row{background:var(--s2);display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border)}
+.bk-actual.g{color:var(–green)}
+.bk-actual.r{color:var(–red)}
+.bk-actual.o{color:var(–orange)}
+.bk-actual.t{color:var(–teal)}
+.bk-actual.pu{color:var(–purple)}
+.bk-actual.y{color:var(–gold)}
+.bk-total-row{background:var(–s2);display:flex;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(–border)}
 .bk-total-row:last-child{border-bottom:none}
 .bk-total-lbl{font-size:11px;font-weight:600}
 .bk-total-right{text-align:right}
-.bk-total-plan{font-size:10px;color:var(--text2)}
-.bk-total-actual{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700}
+.bk-total-plan{font-size:10px;color:var(–text2)}
+.bk-total-actual{font-family:‘Clash Display’,sans-serif;font-size:15px;font-weight:700}
 
 /* LOG FORM */
 .form-group{margin-bottom:12px}
-.form-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--text3);margin-bottom:6px}
-.form-input{width:100%;background:var(--s2);border:1px solid var(--border);border-radius:10px;padding:12px 14px;color:var(--text);font-family:'JetBrains Mono',monospace;font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none}
-.form-input:focus{border-color:var(--gold)}
-.form-input option{background:var(--s2)}
-.submit-btn{width:100%;background:var(--gold);color:#000;border:none;border-radius:12px;padding:15px;font-family:'Clash Display',sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;margin-top:4px}
+.form-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(–text3);margin-bottom:6px}
+.form-input{width:100%;background:var(–s2);border:1px solid var(–border);border-radius:10px;padding:12px 14px;color:var(–text);font-family:‘JetBrains Mono’,monospace;font-size:14px;outline:none;transition:border-color .2s;-webkit-appearance:none}
+.form-input:focus{border-color:var(–gold)}
+.form-input option{background:var(–s2)}
+.submit-btn{width:100%;background:var(–gold);color:#000;border:none;border-radius:12px;padding:15px;font-family:‘Clash Display’,sans-serif;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.5px;transition:opacity .2s;margin-top:4px}
 .submit-btn:active{opacity:.8}
 
 /* LOG ENTRIES */
-.log-entry{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(--border)}
+.log-entry{display:flex;justify-content:space-between;align-items:center;padding:12px 16px;border-bottom:1px solid var(–border)}
 .log-entry:last-child{border-bottom:none}
-.log-entry:active{background:var(--s2)}
-.le-left .le-date{font-size:9px;color:var(--text3)}
+.log-entry:active{background:var(–s2)}
+.le-left .le-date{font-size:9px;color:var(–text3)}
 .le-left .le-cat{font-size:11px;margin-top:2px}
-.le-left .le-desc{font-size:9px;color:var(--text2);margin-top:1px}
+.le-left .le-desc{font-size:9px;color:var(–text2);margin-top:1px}
 .le-right{display:flex;align-items:center;gap:8px}
-.le-amt{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700;color:var(--red)}
-.le-amt.income{color:var(--green)}
-.le-del{background:none;border:none;color:var(--text3);font-size:14px;cursor:pointer;padding:4px}
-.empty-state{padding:32px 16px;text-align:center;color:var(--text3);font-size:12px}
+.le-amt{font-family:‘Clash Display’,sans-serif;font-size:15px;font-weight:700;color:var(–red)}
+.le-amt.income{color:var(–green)}
+.le-del{background:none;border:none;color:var(–text3);font-size:14px;cursor:pointer;padding:4px}
+.empty-state{padding:32px 16px;text-align:center;color:var(–text3);font-size:12px}
 
 /* ACCOUNT BALANCE */
-.bal-row{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(--border)}
+.bal-row{display:flex;justify-content:space-between;align-items:center;padding:13px 16px;border-bottom:1px solid var(–border)}
 .bal-row:last-child{border-bottom:none}
-.bal-row:active{background:var(--s2)}
+.bal-row:active{background:var(–s2)}
 .bal-month{font-size:12px;font-weight:500}
 .bal-phase{font-size:8px;padding:2px 7px;border-radius:8px;margin-top:2px;display:inline-block}
 .bal-phase.p1{background:rgba(29,78,216,.2);color:#93b4fd}
 .bal-phase.p2{background:rgba(21,128,61,.2);color:#86efac}
 .bal-nums{text-align:right}
-.bal-expected{font-size:10px;color:var(--text2)}
-.bal-actual-inp{background:var(--s2);border:1px solid var(--border2);border-radius:8px;padding:5px 8px;color:var(--gold);font-family:'JetBrains Mono',monospace;font-size:12px;width:110px;text-align:right;outline:none}
-.bal-actual-inp:focus{border-color:var(--gold)}
+.bal-expected{font-size:10px;color:var(–text2)}
+.bal-actual-inp{background:var(–s2);border:1px solid var(–border2);border-radius:8px;padding:5px 8px;color:var(–gold);font-family:‘JetBrains Mono’,monospace;font-size:12px;width:110px;text-align:right;outline:none}
+.bal-actual-inp:focus{border-color:var(–gold)}
 .bal-variance{font-size:10px;margin-top:3px;font-weight:600}
-.bal-variance.pos{color:var(--green)}
-.bal-variance.neg{color:var(--red)}
+.bal-variance.pos{color:var(–green)}
+.bal-variance.neg{color:var(–red)}
 
 /* HTOPUP */
-.ht-row{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border)}
+.ht-row{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(–border)}
 .ht-row:last-child{border-bottom:none}
 .ht-month{font-size:11px}
 .ht-nums{text-align:right}
-.ht-credited{font-size:10px;color:var(--text2)}
-.ht-bal{font-family:'Clash Display',sans-serif;font-size:14px;font-weight:700}
-.ht-bal.pos{color:var(--teal)}
-.ht-bal.neg{color:var(--red)}
+.ht-credited{font-size:10px;color:var(–text2)}
+.ht-bal{font-family:‘Clash Display’,sans-serif;font-size:14px;font-weight:700}
+.ht-bal.pos{color:var(–teal)}
+.ht-bal.neg{color:var(–red)}
 
 /* TIMELINE */
-.tl-item{background:var(--s1);border:1px solid var(--border);border-radius:14px;margin-bottom:8px;overflow:hidden}
+.tl-item{background:var(–s1);border:1px solid var(–border);border-radius:14px;margin-bottom:8px;overflow:hidden}
 .tl-hdr{display:flex;justify-content:space-between;align-items:center;padding:14px 16px;cursor:pointer}
-.tl-hdr:active{background:var(--s2)}
-.tl-mo{font-family:'Clash Display',sans-serif;font-size:15px;font-weight:700}
-.tl-mo-sub{font-size:9px;color:var(--text3);margin-top:2px}
+.tl-hdr:active{background:var(–s2)}
+.tl-mo{font-family:‘Clash Display’,sans-serif;font-size:15px;font-weight:700}
+.tl-mo-sub{font-size:9px;color:var(–text3);margin-top:2px}
 .tl-right{display:flex;align-items:center;gap:8px}
-.tl-chev{color:var(--text3);font-size:12px;transition:transform .2s}
+.tl-chev{color:var(–text3);font-size:12px;transition:transform .2s}
 .tl-chev.open{transform:rotate(180deg)}
-.tl-body{display:none;border-top:1px solid var(--border);padding:12px 16px}
+.tl-body{display:none;border-top:1px solid var(–border);padding:12px 16px}
 .tl-body.open{display:block}
 .tl-line{display:flex;justify-content:space-between;padding:5px 0;font-size:11px;border-bottom:1px solid rgba(255,255,255,.04)}
 .tl-line:last-child{border-bottom:none}
-.tl-key{color:var(--text3)}
+.tl-key{color:var(–text3)}
 .tl-v{font-weight:500}
-.tl-v.g{color:var(--green)}.tl-v.r{color:var(--red)}.tl-v.o{color:var(--orange)}.tl-v.t{color:var(--teal)}.tl-v.y{color:var(--gold)}
+.tl-v.g{color:var(–green)}.tl-v.r{color:var(–red)}.tl-v.o{color:var(–orange)}.tl-v.t{color:var(–teal)}.tl-v.y{color:var(–gold)}
 
 /* CHART WRAPPER */
-.chart-wrap{background:var(--s1);border:1px solid var(--border);border-radius:14px;padding:16px;margin-bottom:12px}
-.chart-title{font-family:'Clash Display',sans-serif;font-size:13px;font-weight:600;margin-bottom:14px;color:var(--text)}
+.chart-wrap{background:var(–s1);border:1px solid var(–border);border-radius:14px;padding:16px;margin-bottom:12px}
+.chart-title{font-family:‘Clash Display’,sans-serif;font-size:13px;font-weight:600;margin-bottom:14px;color:var(–text)}
 .chart-canvas{width:100%!important;max-height:220px}
 
 /* EXPORT */
-.export-btn{width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:12px;padding:14px;color:var(--teal);font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;letter-spacing:.5px;transition:all .2s;margin-bottom:10px}
-.export-btn:active{background:var(--s3)}
-.danger-btn{width:100%;background:transparent;border:1px solid rgba(248,113,113,.3);border-radius:12px;padding:14px;color:var(--red);font-family:'JetBrains Mono',monospace;font-size:12px;cursor:pointer;letter-spacing:.5px}
+.export-btn{width:100%;background:var(–s2);border:1px solid var(–border2);border-radius:12px;padding:14px;color:var(–teal);font-family:‘JetBrains Mono’,monospace;font-size:12px;cursor:pointer;letter-spacing:.5px;transition:all .2s;margin-bottom:10px}
+.export-btn:active{background:var(–s3)}
+.danger-btn{width:100%;background:transparent;border:1px solid rgba(248,113,113,.3);border-radius:12px;padding:14px;color:var(–red);font-family:‘JetBrains Mono’,monospace;font-size:12px;cursor:pointer;letter-spacing:.5px}
 .danger-btn:active{background:rgba(248,113,113,.1)}
 
 /* CHIT */
-.chit-info{padding:12px 16px;border-bottom:1px solid var(--border)}
-.chit-name{font-family:'Clash Display',sans-serif;font-size:14px;font-weight:700}
-.chit-detail{font-size:9px;color:var(--text3);margin-top:3px;line-height:1.5}
-.chit-row{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(--border)}
+.chit-info{padding:12px 16px;border-bottom:1px solid var(–border)}
+.chit-name{font-family:‘Clash Display’,sans-serif;font-size:14px;font-weight:700}
+.chit-detail{font-size:9px;color:var(–text3);margin-top:3px;line-height:1.5}
+.chit-row{display:flex;justify-content:space-between;align-items:center;padding:11px 16px;border-bottom:1px solid var(–border)}
 .chit-row:last-child{border-bottom:none}
 .chit-mo{font-size:11px}
-.chit-mo-num{font-size:9px;color:var(--text3);margin-top:1px}
+.chit-mo-num{font-size:9px;color:var(–text3);margin-top:1px}
 .chit-amounts{text-align:right}
-.chit-plan{font-size:10px;color:var(--text2)}
-.chit-actual{font-size:12px;font-weight:600;color:var(--teal)}
+.chit-plan{font-size:10px;color:var(–text2)}
+.chit-actual{font-size:12px;font-weight:600;color:var(–teal)}
 
 /* OPENING BAL INPUT */
-.ob-card{background:var(--s1);border:1px solid var(--gold);border-radius:14px;padding:16px;margin-bottom:12px}
-.ob-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
-.ob-input{width:100%;background:var(--s2);border:1px solid var(--border2);border-radius:10px;padding:14px;color:var(--gold);font-family:'Clash Display',sans-serif;font-size:20px;font-weight:700;outline:none;text-align:center;-webkit-appearance:none}
-.ob-input:focus{border-color:var(--gold)}
-.ob-note{font-size:9px;color:var(--text3);margin-top:8px;text-align:center}
+.ob-card{background:var(–s1);border:1px solid var(–gold);border-radius:14px;padding:16px;margin-bottom:12px}
+.ob-lbl{font-size:9px;letter-spacing:1px;text-transform:uppercase;color:var(–gold);margin-bottom:8px}
+.ob-input{width:100%;background:var(–s2);border:1px solid var(–border2);border-radius:10px;padding:14px;color:var(–gold);font-family:‘Clash Display’,sans-serif;font-size:20px;font-weight:700;outline:none;text-align:center;-webkit-appearance:none}
+.ob-input:focus{border-color:var(–gold)}
+.ob-note{font-size:9px;color:var(–text3);margin-top:8px;text-align:center}
 
 /* SCROLLBAR */
 ::-webkit-scrollbar{width:0;height:0}
 </style>
+
 </head>
 <body>
 
@@ -271,6 +273,7 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 </div>
 
 <!-- OVERVIEW -->
+
 <div class="page active" id="page-overview">
   <div id="phaseBanner"></div>
   <div class="stat-grid" id="statGrid"></div>
@@ -285,13 +288,30 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 </div>
 
 <!-- BUDGET BREAKDOWN -->
+
 <div class="page" id="page-breakdown">
   <div class="card" id="breakdownCard"></div>
 </div>
 
 <!-- GOALS -->
+
 <div class="page" id="page-goals">
   <div class="sec-lbl">Credit Card Payoff</div>
+  <div class="card" style="margin-bottom:10px">
+    <div class="card-hdr"><div class="card-title">Opening Balances — Edit if needed</div></div>
+    <div class="card-body" style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div>
+        <div class="form-lbl">Card B (AED)</div>
+        <input type="number" class="form-input" id="cbOB" inputmode="decimal"
+          placeholder="15000" onchange="saveCCOB('B',this.value);renderGoals()">
+      </div>
+      <div>
+        <div class="form-lbl">Card A (AED)</div>
+        <input type="number" class="form-input" id="caOB" inputmode="decimal"
+          placeholder="20000" onchange="saveCCOB('A',this.value);renderGoals()">
+      </div>
+    </div>
+  </div>
   <div id="ccGoals"></div>
   <div class="sec-lbl">Wedding Fund</div>
   <div id="wedGoal"></div>
@@ -309,6 +329,7 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 </div>
 
 <!-- LOG -->
+
 <div class="page" id="page-log">
   <div class="card" style="margin-bottom:12px">
     <div class="card-hdr"><div class="card-title">✎ Add Transaction</div></div>
@@ -337,6 +358,7 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 </div>
 
 <!-- ACCOUNT -->
+
 <div class="page" id="page-account">
   <div class="ob-card">
     <div class="ob-lbl">Opening Balance — Mar 1, 2026 (AED)</div>
@@ -350,6 +372,7 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 </div>
 
 <!-- MORE -->
+
 <div class="page" id="page-more">
   <div class="sec-lbl">Chit Funds</div>
   <div class="card" id="chitCard"></div>
@@ -397,18 +420,21 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
   <div class="sec-lbl" style="margin-top:16px">10-Month Timeline</div>
   <div id="timeline"></div>
   <div class="sec-lbl" style="margin-top:16px">Data & Backup</div>
-  <button class="export-btn" onclick="exportData()">⬇ Export All Entries (Backup)</button>
-  <button class="export-btn" onclick="exportCSV()">⬇ Export as CSV for Excel</button>
-  <button class="export-btn" style="color:var(--gold);border-color:rgba(212,168,67,.4)" onclick="document.getElementById('importFile').click()">⬆ Import from CSV (Restore)</button>
-  <input type="file" id="importFile" accept=".csv,.txt" style="display:none" onchange="importCSV(event)">
-  <button class="danger-btn" onclick="clearData()">⚠ Clear All Data</button>
+  <button class="export-btn" onclick="exportText()">⬇ Export — Copy to Notes / WhatsApp</button>
+  <button class="export-btn" style="color:var(--gold);border-color:rgba(212,168,67,.4)" onclick="showImportBox()">⬆ Import — Paste your backup text</button>
+  <div id="importBox" style="display:none;margin-top:10px">
+    <div class="form-lbl" style="margin-bottom:6px">Paste your exported text below then tap Import</div>
+    <textarea id="importText" class="form-input" rows="6" style="resize:vertical;font-size:11px;line-height:1.5" placeholder="Paste your backup text here..."></textarea>
+    <button class="submit-btn" style="margin-top:8px" onclick="importFromText()">⬆ Import Now</button>
+    <button class="export-btn" style="margin-top:6px" onclick="document.getElementById('importBox').style.display='none'">Cancel</button>
+  </div>
+  <button class="danger-btn" style="margin-top:10px" onclick="clearData()">⚠ Clear All Data</button>
   <div style="margin-top:20px;padding:16px;background:var(--s1);border:1px solid var(--border);border-radius:14px;font-size:9px;color:var(--text3);line-height:1.7">
     <div style="color:var(--gold);font-size:10px;font-weight:600;margin-bottom:6px">DATA SAFETY</div>
     Your data is stored in this browser's local storage. To prevent loss:<br>
-    1. Export CSV weekly after your review<br>
-    2. Save the CSV to Notes or WhatsApp Saved Messages<br>
-    3. If URL changes — import that CSV into the new app instantly<br>
-    4. Do NOT clear Safari website data in iPhone Settings<br><br>
+    1. Tap Export → share to WhatsApp Saved Messages or Notes<br>
+    2. If URL changes — tap Import → paste the text → done<br>
+    3. Do NOT clear Safari website data in iPhone Settings<br><br>
     <span style="color:var(--teal)">Forex rate: 1 INR = AED 0.0408</span>
   </div>
 </div>
@@ -416,7 +442,7 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 <script>
 // ── DATA ────────────────────────────────────────────────────────
 const MONTHS = ["Mar 2026", "Apr 2026", "May 2026", "Jun 2026", "Jul 2026", "Aug 2026", "Sep 2026", "Oct 2026", "Nov 2026", "Dec 2026"];
-const CATS = ["Primary Salary", "Secondary Income", "H-Topup Allowance", "Rent", "Food", "Shopping & Entertainment", "Transport & Utilities", "Remittance to India", "Chit Fund 1", "Chit Fund 2", "Card B Payment", "Card A Payment", "Emergency Buffer", "Wedding Fund", "H-Topup Expense"];
+const CATS = ["Primary Salary", "Secondary Income", "H-Topup Allowance", "Rent", "Food", "Shopping & Entertainment", "Transport & Utilities", "Remittance to India", "Chit Fund 1", "Chit Fund 2", "Card B Payment", "Card A Payment", "Card B Spend", "Card A Spend", "Emergency Buffer", "Wedding Fund", "H-Topup Expense", "Unplanned Expenses"];
 const PLAN = {"Mar 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Apr 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"May 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Jun 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Jul 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Aug 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Sep 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280},"Oct 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280},"Nov 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280},"Dec 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280}};
 const FOREX = 24.5;
 const INCOME_CATS = ["Primary Salary","Secondary Income","H-Topup Allowance"];
@@ -429,6 +455,7 @@ let selMonth = 0;
 let entries  = JSON.parse(localStorage.getItem('bgt_entries') || '[]');
 let balances = JSON.parse(localStorage.getItem('bgt_balances') || '{}');
 let openingBal = parseFloat(localStorage.getItem('bgt_ob') || '0');
+let ccOpeningBal = JSON.parse(localStorage.getItem('bgt_ccob') || '{"B":15000,"A":20000}');
 let charts = {};
 
 // ── HELPERS ─────────────────────────────────────────────────────
@@ -589,9 +616,14 @@ function renderOverview() {
 
   // Mini goals
   const cum = getCumActuals(selMonth);
-  const debtCleared = Math.min(35000, (cum["Card B Payment"]||0)+(cum["Card A Payment"]||0));
+  const cbOB = ccOpeningBal.B || 15000;
+  const caOB = ccOpeningBal.A || 20000;
+  const totalDebtOB = cbOB + caOB;
+  const cbBal = Math.max(0, cbOB - (cum["Card B Payment"]||0) + (cum["Card B Spend"]||0));
+  const caBal = Math.max(0, caOB - (cum["Card A Payment"]||0) + (cum["Card A Spend"]||0));
+  const debtCleared = (cbOB - cbBal) + (caOB - caBal);
   const wedSaved = cum["Wedding Fund"]||0;
-  const debtPct = Math.min(100, Math.round(debtCleared/350));
+  const debtPct = Math.min(100, Math.round(debtCleared/totalDebtOB*100));
   const wedPct = Math.min(100, Math.round(wedSaved/640));
 
   document.getElementById('miniGoals').innerHTML = `
@@ -718,27 +750,54 @@ function renderGoals() {
     cumPlanCA+=p["Card A Payment"];
   }
 
-  const cbCleared = Math.min(15000, cum["Card B Payment"]||0);
-  const caCleared = Math.min(20000, cum["Card A Payment"]||0);
-  const cbPct = Math.min(100,Math.round(cbCleared/150));
-  const caPct = Math.min(100,Math.round(caCleared/200));
+  // CC opening balances — use saved values
+  const cbOB = ccOpeningBal.B || 15000;
+  const caOB = ccOpeningBal.A || 20000;
+  const totalDebtOB = cbOB + caOB;
+
+  // Populate input fields with saved values
+  const cbInp = document.getElementById('cbOB');
+  const caInp = document.getElementById('caOB');
+  if(cbInp && !cbInp.value) cbInp.value = cbOB;
+  if(caInp && !caInp.value) caInp.value = caOB;
+
+  // Cumulative payments and spends up to selected month
+  const cbPaid   = cum["Card B Payment"] || 0;
+  const caPaid   = cum["Card A Payment"] || 0;
+  const cbSpend  = cum["Card B Spend"]   || 0;
+  const caSpend  = cum["Card A Spend"]   || 0;
+
+  // Current balance = opening - payments + new spends
+  const cbBal = Math.max(0, cbOB - cbPaid + cbSpend);
+  const caBal = Math.max(0, caOB - caPaid + caSpend);
+  const cbPct = Math.min(100, Math.round((cbOB - cbBal) / cbOB * 100));
+  const caPct = Math.min(100, Math.round((caOB - caBal) / caOB * 100));
+
+  const cbSpendNote = cbSpend > 0 ? ` · AED ${fmt(cbSpend)} new spend added` : '';
+  const caSpendNote = caSpend > 0 ? ` · AED ${fmt(caSpend)} new spend added` : '';
 
   document.getElementById('ccGoals').innerHTML = `
     <div class="prog-card">
       <div class="prog-top">
-        <div><div class="prog-name">Card B — AED 15,000</div><div class="prog-sub">AED 3,000/mo · clears June 2026</div></div>
+        <div>
+          <div class="prog-name">Card B — Opening: AED ${fmt(cbOB)}</div>
+          <div class="prog-sub">Paid: AED ${fmt(cbPaid)}${cbSpendNote} · Balance: AED ${fmt(cbBal)}</div>
+        </div>
         <div class="prog-pct" style="color:var(--orange)">${cbPct}%</div>
       </div>
       <div class="prog-bg"><div class="prog-fill debt" style="width:${cbPct}%"></div></div>
-      <div class="prog-nums"><span>AED ${fmt(cbCleared)} cleared</span><span>AED 15,000</span></div>
+      <div class="prog-nums"><span>AED ${fmt(cbOB-cbBal)} cleared</span><span>AED ${fmt(cbOB)}</span></div>
     </div>
     <div class="prog-card">
       <div class="prog-top">
-        <div><div class="prog-name">Card A — AED 20,000</div><div class="prog-sub">AED 3,000/mo · clears August 2026</div></div>
+        <div>
+          <div class="prog-name">Card A — Opening: AED ${fmt(caOB)}</div>
+          <div class="prog-sub">Paid: AED ${fmt(caPaid)}${caSpendNote} · Balance: AED ${fmt(caBal)}</div>
+        </div>
         <div class="prog-pct" style="color:var(--orange)">${caPct}%</div>
       </div>
       <div class="prog-bg"><div class="prog-fill debt" style="width:${caPct}%"></div></div>
-      <div class="prog-nums"><span>AED ${fmt(caCleared)} cleared</span><span>AED 20,000</span></div>
+      <div class="prog-nums"><span>AED ${fmt(caOB-caBal)} cleared</span><span>AED ${fmt(caOB)}</span></div>
     </div>`;
 
   const wedSaved = cum["Wedding Fund"]||0;
@@ -768,49 +827,59 @@ function renderGoals() {
   // Wedding chart
   if(charts.wed) charts.wed.destroy();
   const wedPlanCum = [], wedActCum = [];
-  let wp=0, wa=0;
+  let wp=0, wa=0, hasAnyWed=false;
   MONTHS.forEach((m,i)=>{
     wp += PLAN[m]["Wedding Fund"];
     const a = getActuals(m);
-    wa += a["Wedding Fund"]||0;
-    wedPlanCum.push(wp);
-    wedActCum.push(wa>0?wa:null);
+    const thisMonth = a["Wedding Fund"]||0;
+    if(thisMonth > 0) hasAnyWed = true;
+    wa += thisMonth;
+    wedPlanCum.push(Math.round(wp));
+    wedActCum.push(hasAnyWed ? Math.round(wa) : null);
   });
   charts.wed = new Chart(document.getElementById('wedChart').getContext('2d'),{
     type:'line',
     data:{labels:MONTHS.map(m=>m.split(' ')[0]),datasets:[
-      {label:'Plan',data:wedPlanCum,borderColor:'rgba(96,165,250,.8)',backgroundColor:'rgba(96,165,250,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:3},
-      {label:'Actual',data:wedActCum,borderColor:'rgba(45,212,191,.8)',backgroundColor:'rgba(45,212,191,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:3},
+      {label:'Plan',data:wedPlanCum,borderColor:'rgba(96,165,250,.8)',backgroundColor:'rgba(96,165,250,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(96,165,250,1)'},
+      {label:'Actual',data:wedActCum,borderColor:'rgba(45,212,191,.8)',backgroundColor:'rgba(45,212,191,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(45,212,191,1)',spanGaps:true},
     ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{labels:{color:'#8892aa',font:{size:10}}}},
-      scales:{x:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}},
-              y:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}}}
+      scales:{
+        x:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}},
+        y:{ticks:{color:'#8892aa',font:{size:10},callback:v=>'AED '+v.toLocaleString()},grid:{color:'rgba(255,255,255,.05)'},beginAtZero:true}
+      }
     }
   });
 
-  // Debt chart
+  // Debt chart — uses actual opening balances + tracks spends
   if(charts.debt) charts.debt.destroy();
   const debtPlanCum=[], debtActCum=[];
-  let dp=35000, da=35000;
+  let dp = cbOB + caOB; // plan starts from actual opening balances
+  let da = cbOB + caOB;
+  let hasAnyDebt = false;
   MONTHS.forEach((m,i)=>{
     const p=PLAN[m]; const a=getActuals(m);
-    dp -= p["Card B Payment"]+p["Card A Payment"];
-    const actDebt=(a["Card B Payment"]||0)+(a["Card A Payment"]||0);
-    if(actDebt>0) da-=actDebt;
-    debtPlanCum.push(Math.max(0,dp));
-    debtActCum.push(da<35000?Math.max(0,da):null);
+    dp -= (p["Card B Payment"]+p["Card A Payment"]);
+    const actPayment = (a["Card B Payment"]||0)+(a["Card A Payment"]||0);
+    const actSpend   = (a["Card B Spend"]||0)+(a["Card A Spend"]||0);
+    if(actPayment > 0 || actSpend > 0) hasAnyDebt = true;
+    if(hasAnyDebt) da = da - actPayment + actSpend;
+    debtPlanCum.push(Math.max(0, Math.round(dp)));
+    debtActCum.push(hasAnyDebt ? Math.max(0, Math.round(da)) : null);
   });
   charts.debt = new Chart(document.getElementById('debtChart').getContext('2d'),{
     type:'line',
     data:{labels:MONTHS.map(m=>m.split(' ')[0]),datasets:[
-      {label:'Plan Balance',data:debtPlanCum,borderColor:'rgba(248,113,113,.8)',backgroundColor:'rgba(248,113,113,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:3},
-      {label:'Actual Balance',data:debtActCum,borderColor:'rgba(251,146,60,.8)',backgroundColor:'rgba(251,146,60,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:3},
+      {label:'Plan Balance',data:debtPlanCum,borderColor:'rgba(248,113,113,.8)',backgroundColor:'rgba(248,113,113,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(248,113,113,1)'},
+      {label:'Actual Balance',data:debtActCum,borderColor:'rgba(251,146,60,.8)',backgroundColor:'rgba(251,146,60,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(251,146,60,1)',spanGaps:true},
     ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{labels:{color:'#8892aa',font:{size:10}}}},
-      scales:{x:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}},
-              y:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}}}
+      scales:{
+        x:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}},
+        y:{ticks:{color:'#8892aa',font:{size:10},callback:v=>'AED '+v.toLocaleString()},grid:{color:'rgba(255,255,255,.05)'},beginAtZero:true}
+      }
     }
   });
 }
@@ -874,6 +943,11 @@ function renderLog() {
 }
 
 // ── ACCOUNT ─────────────────────────────────────────────────────
+function saveCCOB(card, val) {
+  ccOpeningBal[card] = parseFloat(val) || (card==='B' ? 15000 : 20000);
+  localStorage.setItem('bgt_ccob', JSON.stringify(ccOpeningBal));
+}
+
 function saveOB() {
   openingBal = parseFloat(document.getElementById('openingBal').value) || 0;
   localStorage.setItem('bgt_ob', openingBal);
@@ -1188,25 +1262,35 @@ function toggleTL(i) {
   c.classList.toggle('open', open);
 }
 
-// ── EXPORT ──────────────────────────────────────────────────────
-function shareOrCopy(title, text, filename) {
-  // Try native share first (shows WhatsApp, Notes, Mail etc on iPhone)
+// ── EXPORT / IMPORT ─────────────────────────────────────────────
+function buildCSVText() {
+  const rows = ['Date,Description,Category,Amount,Month'];
+  entries.forEach(e => {
+    const desc = (e.desc||'').replace(/"/g,'""');
+    const cat  = (e.cat||'').replace(/"/g,'""');
+    const month = (e.month||'').replace(/"/g,'""');
+    rows.push(`${e.date},"${desc}","${cat}",${e.amt},"${month}"`);
+  });
+  return rows.join('\n');
+}
+
+function exportText() {
+  if (entries.length === 0) { alert('No entries to export yet.'); return; }
+  const text = buildCSVText();
+  // Try share sheet first (iPhone shows WhatsApp, Notes, Mail etc)
   if (navigator.share) {
-    navigator.share({title, text})
+    navigator.share({title:'Budget 2026 Backup', text})
       .then(() => {})
-      .catch(() => {
-        // If share fails, fallback to clipboard copy
-        copyToClipboard(text);
-      });
+      .catch(() => copyText(text));
   } else {
-    copyToClipboard(text);
+    copyText(text);
   }
 }
 
-function copyToClipboard(text) {
+function copyText(text) {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard.writeText(text)
-      .then(() => alert('✅ Copied to clipboard!\nPaste it into Notes or WhatsApp Saved Messages.'))
+      .then(() => alert('✅ Copied!\nPaste into WhatsApp Saved Messages or Notes.'))
       .catch(() => fallbackCopy(text));
   } else {
     fallbackCopy(text);
@@ -1221,95 +1305,101 @@ function fallbackCopy(text) {
   ta.focus(); ta.select();
   try {
     document.execCommand('copy');
-    alert('✅ Copied to clipboard!\nPaste it into Notes or WhatsApp Saved Messages.');
+    alert('✅ Copied!\nPaste into WhatsApp Saved Messages or Notes.');
   } catch(e) {
-    alert('Could not copy automatically.\nPlease manually select and copy the text below:\n\n' + text.substring(0, 300) + '...');
+    alert('Please manually copy the text from your backup.');
   }
   document.body.removeChild(ta);
 }
 
-function exportData() {
-  if (entries.length === 0) { alert('No entries to export yet.'); return; }
-  const lines = ['BUDGET 2026 — DATA EXPORT', new Date().toLocaleString(), '', 'TRANSACTIONS:'];
-  entries.forEach(e => lines.push(`${e.date}|${e.month}|${e.cat}|${e.amt}|${e.desc||''}`));
-  lines.push('', 'ACCOUNT BALANCES:');
-  Object.entries(balances).forEach(([k,v]) => lines.push(`Month ${k}: AED ${v}`));
-  shareOrCopy('Budget 2026 Backup', lines.join('\n'), 'budget_backup.txt');
+function showImportBox() {
+  const box = document.getElementById('importBox');
+  box.style.display = box.style.display === 'none' ? 'block' : 'none';
+  if (box.style.display === 'block') {
+    document.getElementById('importText').value = '';
+    document.getElementById('importText').focus();
+  }
 }
 
-function exportCSV() {
-  if (entries.length === 0) { alert('No entries to export yet.'); return; }
-  const rows = ['Date,Description,Category,Amount,Month'];
-  entries.forEach(e => rows.push(`${e.date},"${(e.desc||'').replace(/"/g,'""')}","${e.cat}",${e.amt},"${e.month||''}"`));
-  shareOrCopy('Budget 2026 CSV', rows.join('\n'), 'budget_2026.csv');
-}
-
-function importCSV(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const lines = e.target.result.split('\n').filter(l => l.trim());
-      // Skip header row
-      const dataLines = lines[0].startsWith('Date') ? lines.slice(1) : lines;
-      let imported = 0, skipped = 0;
-      const newEntries = [];
-      dataLines.forEach(line => {
-        if (!line.trim()) return;
-        // Parse CSV properly handling quoted fields
-        const cols = [];
-        let cur = '', inQuote = false;
-        for (let i = 0; i < line.length; i++) {
-          if (line[i] === '"') { inQuote = !inQuote; }
-          else if (line[i] === ',' && !inQuote) { cols.push(cur.trim()); cur = ''; }
-          else cur += line[i];
-        }
-        cols.push(cur.trim());
-        const [date, desc, cat, amt, month] = cols;
-        if (!date || !cat || !amt) { skipped++; return; }
-        const parsedAmt = parseFloat(amt);
-        if (isNaN(parsedAmt) || parsedAmt <= 0) { skipped++; return; }
-        // Check if entry already exists (same date + cat + amt)
-        const exists = entries.some(ex => ex.date===date && ex.cat===cat && ex.amt===parsedAmt);
-        if (exists) { skipped++; return; }
-        newEntries.push({
-          id: Date.now() + imported,
-          date: date.trim(),
-          desc: (desc||'').replace(/""/g,'"'),
-          cat: cat.trim(),
-          amt: parsedAmt,
-          month: month ? month.trim() : entryMonth(date.trim())
-        });
-        imported++;
-      });
-      if (newEntries.length === 0) {
-        alert('No new entries found to import.\n' + skipped + ' duplicate or invalid rows skipped.');
-        return;
-      }
-      entries = [...entries, ...newEntries];
-      // Sort by date descending
-      entries.sort((a,b) => new Date(b.date) - new Date(a.date));
-      save();
-      renderLog(); renderOverview(); renderBreakdown(); renderGoals(); renderAccount();
-      alert('✅ Import successful!\n' + imported + ' entries imported.\n' + skipped + ' duplicates/invalid skipped.');
-    } catch(err) {
-      alert('Import failed. Make sure you are using a CSV exported from this app.\n\nError: ' + err.message);
+function parseCSVLine(line) {
+  const cols = [];
+  let cur = '', inQ = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQ && line[i+1] === '"') { cur += '"'; i++; }
+      else inQ = !inQ;
+    } else if (ch === ',' && !inQ) {
+      cols.push(cur.trim().replace(/^"|"$/g,''));
+      cur = '';
+    } else {
+      cur += ch;
     }
-    // Reset file input so same file can be imported again if needed
-    event.target.value = '';
-  };
-  reader.readAsText(file);
+  }
+  cols.push(cur.trim().replace(/^"|"$/g,''));
+  return cols;
 }
+
+function importFromText() {
+  const raw = document.getElementById('importText').value.trim();
+  if (!raw) { alert('Please paste your backup text first.'); return; }
+
+  const lines = raw.replace(/\r\n/g,'\n').replace(/\r/g,'\n').split('\n').filter(l => l.trim());
+  if (lines.length === 0) { alert('No data found. Please paste your backup text.'); return; }
+
+  // Skip header row if present
+  const dataLines = lines[0].toLowerCase().startsWith('date') ? lines.slice(1) : lines;
+  if (dataLines.length === 0) { alert('No data rows found.'); return; }
+
+  let imported = 0, skipped = 0, errors = 0;
+  const newEntries = [];
+
+  dataLines.forEach((line, idx) => {
+    if (!line.trim()) return;
+    try {
+      const cols = parseCSVLine(line);
+      if (cols.length < 4) { errors++; return; }
+      const date  = cols[0].trim();
+      const desc  = cols[1].trim();
+      const cat   = cols[2].trim();
+      const amt   = parseFloat(cols[3]);
+      const month = cols[4] ? cols[4].trim() : entryMonth(date);
+      if (!date || !cat || isNaN(amt) || amt <= 0) { errors++; return; }
+      // Duplicate check
+      const isDup = entries.some(ex =>
+        ex.date === date && ex.cat === cat && Math.abs(ex.amt - amt) < 0.01
+      );
+      if (isDup) { skipped++; return; }
+      newEntries.push({ id: Date.now()+imported+idx, date, desc, cat, amt, month: month||entryMonth(date) });
+      imported++;
+    } catch(e) { errors++; }
+  });
+
+  if (imported === 0) {
+    alert(`Nothing imported.\n• ${skipped} duplicates skipped\n• ${errors} invalid rows\n\nMake sure you pasted the text exported from this app.`);
+    return;
+  }
+
+  entries = [...entries, ...newEntries];
+  entries.sort((a,b) => new Date(b.date) - new Date(a.date));
+  save();
+  renderLog(); renderOverview(); renderBreakdown(); renderGoals(); renderAccount();
+  document.getElementById('importText').value = '';
+  document.getElementById('importBox').style.display = 'none';
+  alert(`✅ Import successful!\n• ${imported} entries imported\n• ${skipped} duplicates skipped\n• ${errors} invalid rows ignored`);
+}
+
+
 
 function clearData() {
   const total = entries.length;
   if (!confirm(`⚠️ CLEAR ALL DATA?\n\nYou have ${total} transaction${total!==1?'s':''} saved.\n\nThis will permanently delete:\n• All ${total} transactions\n• All account balances\n• All chit fund win records\n\nHave you exported a backup?\n\nTap OK only if you are sure.`)) return;
-  entries = []; balances = {}; chitWins = [];
+  entries = []; balances = {}; chitWins = {}; ccOpeningBal = {"B":15000,"A":20000};
   localStorage.removeItem('bgt_entries');
   localStorage.removeItem('bgt_balances');
   localStorage.removeItem('bgt_ob');
   localStorage.removeItem('bgt_chitwins');
+  localStorage.removeItem('bgt_ccob');
   document.getElementById('openingBal').value = '';
   openingBal = 0;
   renderLog(); renderOverview(); renderBreakdown(); renderGoals(); renderAccount(); renderChitWinHistory();
@@ -1335,5 +1425,6 @@ function save() {
 // ── START ───────────────────────────────────────────────────────
 init();
 </script>
+
 </body>
 </html>
