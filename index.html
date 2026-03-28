@@ -343,7 +343,7 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
       <button class="submit-btn" onclick="addEntry()">＋ Add Entry</button>
     </div>
   </div>
-  <div class="sec-lbl">Recent Transactions</div>
+  <div class="sec-lbl" id="logListLabel">Transactions — Mar 2026</div>
   <div class="card" id="logList"></div>
 </div>
 
@@ -675,6 +675,7 @@ function selectMonth(idx) {
   renderBreakdown();
   renderGoals();
   renderAccount();
+  renderLog();
 }
 
 // ── OVERVIEW ────────────────────────────────────────────────────
@@ -1006,12 +1007,16 @@ function delEntry(id) {
 
 function renderLog() {
   const el = document.getElementById('logList');
-  if (!entries.length) {
-    el.innerHTML = '<div class="empty-state">No entries yet.<br>Start logging your transactions.</div>';
+  const lbl = document.getElementById('logListLabel');
+  const m = MONTHS[selMonth];
+  if (lbl) lbl.textContent = 'Transactions — ' + m;
+  const monthEntries = entries.filter(e => e.month === m);
+  if (!monthEntries.length) {
+    el.innerHTML = '<div class="empty-state">No transactions logged for ' + m + '.<br>Add entries above.</div>';
     return;
   }
   const incomeCats = new Set([...INCOME_CATS, 'Debtor Repayment']);
-  el.innerHTML = entries.slice(0,50).map(e => `
+  el.innerHTML = monthEntries.map(e => `
     <div class="log-entry">
       <div class="le-left">
         <div class="le-date">${e.date} · ${e.month||''}</div>
@@ -1717,6 +1722,7 @@ function nav(page) {
   const pages=['overview','breakdown','goals','log','account','more'];
   document.querySelectorAll('.ni')[pages.indexOf(page)].classList.add('active');
   if(page==='goals') renderGoals();
+  if(page==='log') renderLog();
   if(page==='more') { renderChits(); renderTimeline(); }
 }
 
