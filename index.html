@@ -594,7 +594,7 @@ function getPlanTotals(mo) {
   const htopup  = p["H-Topup Expense"];
   const debt    = p["Card B Payment"] + p["Card A Payment"];
   const savings = p["Emergency Buffer"] + p["Wedding Fund"];
-  const net     = income - living - debt - savings;
+  const net     = income - living - htopup - debt - savings;
   return {income, living, htopup, debt, savings, net};
 }
 
@@ -602,10 +602,11 @@ function getActualTotals(monthLabel) {
   const a = getActuals(monthLabel);
   const income  = INCOME_CATS.reduce((s,c)=>s+a[c],0);
   const living  = ["Rent","Food","Shopping & Entertainment","Transport & Utilities","Remittance to India","Chit Fund 1","Chit Fund 2"].reduce((s,c)=>s+a[c],0);
-  const htopup  = a["H-Topup Expense"];
+  const htopup  = a["H-Topup Expense"] || 0;
   const debt    = DEBT_CATS.reduce((s,c)=>s+a[c],0);
   const savings = SAVE_CATS.reduce((s,c)=>s+a[c],0);
-  const net     = income - living - debt - savings;
+  const unplanned = (a["Unplanned Expenses"]||0) + (a["Card B Spend"]||0) + (a["Card A Spend"]||0) + (a["Debtor Lending"]||0);
+  const net     = income - living - htopup - debt - savings - unplanned;
   return {income, living, htopup, debt, savings, net};
 }
 
