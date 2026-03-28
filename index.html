@@ -522,17 +522,21 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
   <div class="sec-lbl" style="margin-top:16px">10-Month Timeline</div>
   <div id="timeline"></div>
   <div class="sec-lbl" style="margin-top:16px">Data & Backup</div>
-  <button class="export-btn" onclick="exportData()">⬇ Export All Entries (Backup)</button>
-  <button class="export-btn" onclick="exportCSV()">⬇ Export as CSV for Excel</button>
-  <button class="export-btn" style="color:var(--gold);border-color:rgba(212,168,67,.4)" onclick="document.getElementById('importFile').click()">⬆ Import from CSV (Restore)</button>
-  <input type="file" id="importFile" accept=".csv,.txt" style="display:none" onchange="importCSV(event)">
-  <button class="danger-btn" onclick="clearData()">⚠ Clear All Data</button>
+  <button class="export-btn" onclick="exportText()">⬇ Export — Copy to Notes / WhatsApp</button>
+  <button class="export-btn" style="color:var(--gold);border-color:rgba(212,168,67,.4)" onclick="showImportBox()">⬆ Import — Paste your backup text</button>
+  <div id="importBox" style="display:none;margin-top:10px">
+    <div class="form-lbl" style="margin-bottom:6px">Paste your exported text below then tap Import</div>
+    <textarea id="importText" class="form-input" rows="6" style="resize:vertical;font-size:11px;line-height:1.5" placeholder="Paste your backup text here..."></textarea>
+    <button class="submit-btn" style="margin-top:8px" onclick="importFromText()">⬆ Import Now</button>
+    <button class="export-btn" style="margin-top:6px" onclick="document.getElementById('importBox').style.display='none'">Cancel</button>
+  </div>
+  <button class="danger-btn" style="margin-top:10px" onclick="clearData()">⚠ Clear All Data</button>
   <div style="margin-top:20px;padding:16px;background:var(--s1);border:1px solid var(--border);border-radius:14px;font-size:9px;color:var(--text3);line-height:1.7">
     <div style="color:var(--gold);font-size:10px;font-weight:600;margin-bottom:6px">DATA SAFETY</div>
     Your data is stored in this browser's local storage. To prevent loss:<br>
-    1. Export CSV weekly after your review<br>
-    2. Save the CSV to Notes or WhatsApp Saved Messages<br>
-    3. If URL changes — import that CSV into the new app instantly<br>
+    1. Tap Export → share to WhatsApp Saved Messages or Notes<br>
+    2. If URL changes — tap Import → paste the text → done<br>
+    3. Always open from home screen icon, not by typing URL<br>
     4. Do NOT clear Safari website data in iPhone Settings<br><br>
     <span style="color:var(--teal)">Forex rate: 1 INR = AED 0.0408</span>
   </div>
@@ -1488,79 +1492,6 @@ function fallbackCopy(text) {
   document.body.removeChild(ta);
 }
 
-function exportData() {
-  if (entries.length === 0) { alert('No entries to export yet.'); return; }
-  const lines = ['BUDGET 2026 — DATA EXPORT', new Date().toLocaleString(), '', 'TRANSACTIONS:'];
-  entries.forEach(e => lines.push(`${e.date}|${e.month}|${e.cat}|${e.amt}|${e.desc||''}`));
-  lines.push('', 'ACCOUNT BALANCES:');
-  Object.entries(balances).forEach(([k,v]) => lines.push(`Month ${k}: AED ${v}`));
-  shareOrCopy('Budget 2026 Backup', lines.join('\n'), 'budget_backup.txt');
-}
-
-function exportCSV() {
-  if (entries.length === 0) { alert('No entries to export yet.'); return; }
-  const rows = ['Date,Description,Category,Amount,Month'];
-  entries.forEach(e => rows.push(`${e.date},"${(e.desc||'').replace(/"/g,'""')}","${e.cat}",${e.amt},"${e.month||''}"`));
-  shareOrCopy('Budget 2026 CSV', rows.join('\n'), 'budget_2026.csv');
-}
-
-function importCSV(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = function(e) {
-    try {
-      const lines = e.target.result.split('\n').filter(l => l.trim());
-      // Skip header row
-      const dataLines = lines[0].startsWith('Date') ? lines.slice(1) : lines;
-      let imported = 0, skipped = 0;
-      const newEntries = [];
-      dataLines.forEach(line => {
-        if (!line.trim()) return;
-        // Parse CSV properly handling quoted fields
-        const cols = [];
-        let cur = '', inQuote = false;
-        for (let i = 0; i < line.length; i++) {
-          if (line[i] === '"') { inQuote = !inQuote; }
-          else if (line[i] === ',' && !inQuote) { cols.push(cur.trim()); cur = ''; }
-          else cur += line[i];
-        }
-        cols.push(cur.trim());
-        const [date, desc, cat, amt, month] = cols;
-        if (!date || !cat || !amt) { skipped++; return; }
-        const parsedAmt = parseFloat(amt);
-        if (isNaN(parsedAmt) || parsedAmt <= 0) { skipped++; return; }
-        // Check if entry already exists (same date + cat + amt)
-        const exists = entries.some(ex => ex.date===date && ex.cat===cat && ex.amt===parsedAmt);
-        if (exists) { skipped++; return; }
-        newEntries.push({
-          id: Date.now() + imported,
-          date: date.trim(),
-          desc: (desc||'').replace(/""/g,'"'),
-          cat: cat.trim(),
-          amt: parsedAmt,
-          month: month ? month.trim() : entryMonth(date.trim())
-        });
-        imported++;
-      });
-      if (newEntries.length === 0) {
-        alert('No new entries found to import.\n' + skipped + ' duplicate or invalid rows skipped.');
-        return;
-      }
-      entries = [...entries, ...newEntries];
-      // Sort by date descending
-      entries.sort((a,b) => new Date(b.date) - new Date(a.date));
-      save();
-      renderLog(); renderOverview(); renderBreakdown(); renderGoals(); renderAccount();
-      alert('✅ Import successful!\n' + imported + ' entries imported.\n' + skipped + ' duplicates/invalid skipped.');
-    } catch(err) {
-      alert('Import failed. Make sure you are using a CSV exported from this app.\n\nError: ' + err.message);
-    }
-    // Reset file input so same file can be imported again if needed
-    event.target.value = '';
-  };
-  reader.readAsText(file);
-}
 
 function clearData() {
   const total = entries.length;
