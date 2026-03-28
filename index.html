@@ -1044,13 +1044,29 @@ function renderAccount() {
   MONTHS.forEach((m, i) => {
     const mo = i + 1;
     const p = PLAN[m];
-    const totalIn  = p["Primary Salary"]+p["Secondary Income"]+p["H-Topup Allowance"];
-    const totalOut = p["Rent"]+p["Food"]+p["Shopping & Entertainment"]+p["Transport & Utilities"]+
-                     p["Remittance to India"]+p["Chit Fund 1"]+p["Chit Fund 2"]+
-                     p["Card B Payment"]+p["Card A Payment"]+
-                     p["Emergency Buffer"]+p["Wedding Fund"];
-    const htIn=280, htOut=p["H-Topup Expense"]||280;
-    expectedClose = expectedClose + totalIn - totalOut + htIn - htOut;
+    const a = getActuals(m);
+    const hasAnyActual = entries.some(e => e.month === m);
+
+    // Income: use actual if logged, else plan
+    const incomeCats = ["Primary Salary","Secondary Income","H-Topup Allowance"];
+    const totalIn = incomeCats.reduce((s,c) => {
+      return s + (hasAnyActual && a[c] > 0 ? a[c] : p[c]||0);
+    }, 0);
+
+    // Expenses: use actual if logged for that category, else plan
+    const expCats = ["Rent","Food","Shopping & Entertainment","Transport & Utilities",
+                     "Remittance to India","Chit Fund 1","Chit Fund 2",
+                     "Card B Payment","Card A Payment",
+                     "Emergency Buffer","Wedding Fund","H-Topup Expense"];
+    const totalOut = expCats.reduce((s,c) => {
+      return s + (hasAnyActual && a[c] > 0 ? a[c] : p[c]||0);
+    }, 0);
+
+    // Unplanned expenses — add if logged
+    const unplanned = (a["Unplanned Expenses"]||0) + (a["Card B Spend"]||0) + (a["Card A Spend"]||0);
+
+    expectedClose = expectedClose + totalIn - totalOut - unplanned;
+    const usingActuals = hasAnyActual;
     const actual = balances[mo];
     const variance = actual != null ? actual - expectedClose : null;
     const varCls = variance == null ? '' : variance >= 0 ? 'pos' : 'neg';
@@ -1061,7 +1077,7 @@ function renderAccount() {
           <span class="bal-phase p${mo<=6?1:2}">Phase ${mo<=6?1:2}</span>
         </div>
         <div class="bal-nums">
-          <div class="bal-expected">Expected: ${fmtAED(Math.round(expectedClose))}</div>
+          <div class="bal-expected">Expected: ${fmtAED(Math.round(expectedClose))} <span style="font-size:8px;color:${usingActuals?'var(--teal)':'var(--text3)'}">${usingActuals?'(actuals)':'(plan)'}</span></div>
           <input class="bal-actual-inp" type="number" inputmode="decimal"
             placeholder="Actual" value="${actual||''}"
             onchange="saveActualBal(${mo},this.value)"
