@@ -373,6 +373,28 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
         <div class="form-lbl">Notes (optional)</div>
         <input type="text" class="form-input" id="newDebtorNote" placeholder="e.g. Friend, colleague">
       </div>
+      <div class="form-group">
+        <div class="form-lbl">Opening Balance Currency</div>
+        <select class="form-input" id="newDebtorCurrency" onchange="toggleNewDebtorINR()">
+          <option value="AED">AED</option>
+          <option value="INR">INR</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <div class="form-lbl">Opening Balance (0 if none)</div>
+        <input type="number" class="form-input" id="newDebtorOB" placeholder="0" inputmode="decimal" step="0.01" oninput="toggleNewDebtorINR()">
+      </div>
+      <div class="form-group" id="newDebtorAEDGroup" style="display:none">
+        <div class="form-lbl">Opening Balance in AED (auto)</div>
+        <input type="number" class="form-input" id="newDebtorAEDConv" placeholder="Auto" style="color:var(--teal)" readonly>
+      </div>
+      <div class="form-group" id="newDebtorDirGroup" style="display:none">
+        <div class="form-lbl">They owe you or you owe them?</div>
+        <select class="form-input" id="newDebtorDir">
+          <option value="owe_me">They owe me (I lent them money)</option>
+          <option value="i_owe">I owe them (they lent me money)</option>
+        </select>
+      </div>
       <button class="submit-btn" onclick="createDebtor()">Create Debtor</button>
     </div>
     <div id="debtorSummary"></div>
@@ -920,24 +942,28 @@ function renderGoals() {
   // Wedding chart
   if(charts.wed) charts.wed.destroy();
   const wedPlanCum = [], wedActCum = [];
-  let wp=0, wa=0;
+  let wp=0, wa=0, hasAnyWed=false;
   MONTHS.forEach((m,i)=>{
     wp += PLAN[m]["Wedding Fund"];
     const a = getActuals(m);
-    wa += a["Wedding Fund"]||0;
-    wedPlanCum.push(wp);
-    wedActCum.push(wa>0?wa:null);
+    const thisWed = a["Wedding Fund"]||0;
+    if(thisWed>0) hasAnyWed=true;
+    wa += thisWed;
+    wedPlanCum.push(Math.round(wp));
+    wedActCum.push(hasAnyWed ? Math.round(wa) : null);
   });
   charts.wed = new Chart(document.getElementById('wedChart').getContext('2d'),{
     type:'line',
     data:{labels:MONTHS.map(m=>m.split(' ')[0]),datasets:[
-      {label:'Plan',data:wedPlanCum,borderColor:'rgba(96,165,250,.8)',backgroundColor:'rgba(96,165,250,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:3},
-      {label:'Actual',data:wedActCum,borderColor:'rgba(45,212,191,.8)',backgroundColor:'rgba(45,212,191,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:3},
+      {label:'Plan',data:wedPlanCum,borderColor:'rgba(96,165,250,.8)',backgroundColor:'rgba(96,165,250,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(96,165,250,1)'},
+      {label:'Actual',data:wedActCum,borderColor:'rgba(45,212,191,.8)',backgroundColor:'rgba(45,212,191,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(45,212,191,1)',spanGaps:true},
     ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{labels:{color:'#8892aa',font:{size:10}}}},
-      scales:{x:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}},
-              y:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}}}
+      scales:{
+        x:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}},
+        y:{ticks:{color:'#8892aa',font:{size:10},callback:v=>'AED '+v.toLocaleString()},grid:{color:'rgba(255,255,255,.05)'},beginAtZero:true}
+      }
     }
   });
 
@@ -958,13 +984,15 @@ function renderGoals() {
   charts.debt = new Chart(document.getElementById('debtChart').getContext('2d'),{
     type:'line',
     data:{labels:MONTHS.map(m=>m.split(' ')[0]),datasets:[
-      {label:'Plan Balance',data:debtPlanCum,borderColor:'rgba(248,113,113,.8)',backgroundColor:'rgba(248,113,113,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:3},
-      {label:'Actual Balance',data:debtActCum,borderColor:'rgba(251,146,60,.8)',backgroundColor:'rgba(251,146,60,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:3},
+      {label:'Plan Balance',data:debtPlanCum,borderColor:'rgba(248,113,113,.8)',backgroundColor:'rgba(248,113,113,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(248,113,113,1)'},
+      {label:'Actual Balance',data:debtActCum,borderColor:'rgba(251,146,60,.8)',backgroundColor:'rgba(251,146,60,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(251,146,60,1)',spanGaps:true},
     ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{labels:{color:'#8892aa',font:{size:10}}}},
-      scales:{x:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}},
-              y:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}}}
+      scales:{
+        x:{ticks:{color:'#8892aa',font:{size:10}},grid:{color:'rgba(255,255,255,.05)'}},
+        y:{ticks:{color:'#8892aa',font:{size:10},callback:v=>'AED '+v.toLocaleString()},grid:{color:'rgba(255,255,255,.05)'},beginAtZero:true}
+      }
     }
   });
 }
@@ -1172,13 +1200,17 @@ function renderChits() {
 function renderChitChart() {
   if (charts.chit) charts.chit.destroy();
   const ctx = document.getElementById('chitChart').getContext('2d');
-  // By end of Dec 2026: CF1 = month 13 of 30, CF2 = month 11 of 20
-  const cf1Done = CHIT_INFO[0].paid + 10; // 3 + 10 = 13
-  const cf2Done = CHIT_INFO[1].paid + 10; // 1 + 10 = 11
+  const cf1Logged = entries.filter(e=>e.cat==='Chit Fund 1').length;
+  const cf2Logged = entries.filter(e=>e.cat==='Chit Fund 2').length;
+  const cf1Done = CHIT_INFO[0].paid + cf1Logged;
+  const cf2Done = CHIT_INFO[1].paid + cf2Logged;
   charts.chit = new Chart(ctx, {
     type: 'bar',
     data: {
-      labels: ['Chit Fund 1 (30mo)', 'Chit Fund 2 (20mo)'],
+      labels: [
+        'CF1 — Month '+cf1Done+' of 30',
+        'CF2 — Month '+cf2Done+' of 20'
+      ],
       datasets: [
         {label:'Months Paid', data:[cf1Done, cf2Done],
          backgroundColor:'rgba(45,212,191,.7)', borderColor:'rgba(45,212,191,1)', borderWidth:1, borderRadius:6},
@@ -1191,8 +1223,7 @@ function renderChitChart() {
       indexAxis:'y',
       plugins:{legend:{labels:{color:'#8892aa',font:{size:10}}}},
       scales:{
-        x:{stacked:true, ticks:{color:'#8892aa',font:{size:10}}, grid:{color:'rgba(255,255,255,.05)'},
-           max:30},
+        x:{stacked:true, ticks:{color:'#8892aa',font:{size:10}}, grid:{color:'rgba(255,255,255,.05)'}, max:30},
         y:{stacked:true, ticks:{color:'#8892aa',font:{size:10}}, grid:{color:'rgba(255,255,255,.05)'}}
       }
     }
@@ -1533,21 +1564,59 @@ function showAddDebtor() {
   box.style.display = box.style.display==='none'?'block':'none';
 }
 
+function toggleNewDebtorINR() {
+  const cur = document.getElementById('newDebtorCurrency').value;
+  const amt = parseFloat(document.getElementById('newDebtorOB').value)||0;
+  const grp = document.getElementById('newDebtorAEDGroup');
+  const dirGrp = document.getElementById('newDebtorDirGroup');
+  if(cur==='INR'){
+    grp.style.display='block';
+    document.getElementById('newDebtorAEDConv').value = amt>0?Math.round(amt/FOREX):'';
+  } else {
+    grp.style.display='none';
+  }
+  dirGrp.style.display = amt>0?'block':'none';
+}
+
 function createDebtor() {
   const name = document.getElementById('newDebtorName').value.trim();
   if (!name) { alert('Please enter a debtor name.'); return; }
   if (debtors.find(d=>d.name.toLowerCase()===name.toLowerCase())) {
     alert('Debtor "'+name+'" already exists.'); return;
   }
-  const note = document.getElementById('newDebtorNote').value.trim();
-  debtors.push({ id: Date.now(), name, note });
+  const note     = document.getElementById('newDebtorNote').value.trim();
+  const currency = document.getElementById('newDebtorCurrency').value;
+  const obAmt    = parseFloat(document.getElementById('newDebtorOB').value)||0;
+  const obAED    = currency==='INR' ? Math.round(obAmt/FOREX) : obAmt;
+  const dir      = obAmt>0 ? document.getElementById('newDebtorDir').value : 'owe_me';
+
+  const id = Date.now();
+  debtors.push({ id, name, note });
   localStorage.setItem('bgt_debtors', JSON.stringify(debtors));
-  document.getElementById('newDebtorName').value = '';
-  document.getElementById('newDebtorNote').value = '';
-  document.getElementById('debtorAddBox').style.display = 'none';
+
+  // If opening balance exists, create an opening transaction
+  if (obAED > 0) {
+    const today = new Date().toISOString().split('T')[0];
+    const type  = dir==='owe_me' ? 'lend' : 'receive';
+    debtorTxs.unshift({
+      id: id+1, type, debtor: name,
+      currency, amt: obAmt, aedAmt: obAED,
+      fund: 'Opening Balance', date: today,
+      note: 'Opening balance', month: entryMonth(today)
+    });
+    localStorage.setItem('bgt_debtortxs', JSON.stringify(debtorTxs));
+  }
+
+  // Clear form
+  document.getElementById('newDebtorName').value='';
+  document.getElementById('newDebtorNote').value='';
+  document.getElementById('newDebtorOB').value='';
+  document.getElementById('newDebtorAEDGroup').style.display='none';
+  document.getElementById('newDebtorDirGroup').style.display='none';
+  document.getElementById('debtorAddBox').style.display='none';
   renderDebtorSummary();
   populateDebtorSelect();
-  alert('Debtor "'+name+'" created!');
+  alert('Debtor "'+name+'" created!'+(obAED>0?' Opening balance AED '+fmt(obAED)+' recorded.':''));
 }
 
 function deleteDebtor(id) {
