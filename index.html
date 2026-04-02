@@ -418,6 +418,7 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
       <div class="form-group" id="debtorFromGroup">
         <div class="form-lbl">From My Fund</div>
         <select class="form-input" id="debtorFromFund">
+          <option value="Main Account">Main Account (Bank Balance)</option>
           <option value="Wedding Fund">Wedding Fund</option>
           <option value="Emergency Buffer">Emergency Buffer</option>
           <option value="Card B Payment">Card B Payment</option>
@@ -427,6 +428,7 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
       <div class="form-group" id="debtorToGroup" style="display:none">
         <div class="form-lbl">To My Fund</div>
         <select class="form-input" id="debtorToFund">
+          <option value="Main Account">Main Account (Bank Balance)</option>
           <option value="Wedding Fund">Wedding Fund</option>
           <option value="Emergency Buffer">Emergency Buffer</option>
           <option value="Card B Payment">Card B Payment</option>
@@ -628,7 +630,8 @@ function getActualTotals(monthLabel) {
   const debt    = DEBT_CATS.reduce((s,c)=>s+a[c],0);
   const savings = SAVE_CATS.reduce((s,c)=>s+a[c],0);
   const unplanned = (a["Unplanned Expenses"]||0) + (a["Card B Spend"]||0) + (a["Card A Spend"]||0) + (a["Debtor Lending"]||0);
-  const net     = income - living - htopup - debt - savings - unplanned;
+  const debtorRepay = a["Debtor Repayment"]||0;
+  const net     = income - living - htopup - debt - savings - unplanned + debtorRepay;
   return {income, living, htopup, debt, savings, net};
 }
 
@@ -1099,7 +1102,15 @@ function renderAccount() {
     // Unplanned expenses — add if logged
     const unplanned = (a["Unplanned Expenses"]||0) + (a["Card B Spend"]||0) + (a["Card A Spend"]||0);
 
-    expectedClose = expectedClose + totalIn - totalOut - unplanned;
+    // Debtor transactions affecting main account balance
+    const debtorLentFromAccount = debtorTxs
+      .filter(t=>t.month===m && t.type==='lend' && t.fund==='Main Account')
+      .reduce((s,t)=>s+t.aedAmt, 0);
+    const debtorReceivedToAccount = debtorTxs
+      .filter(t=>t.month===m && t.type==='receive' && t.fund==='Main Account')
+      .reduce((s,t)=>s+t.aedAmt, 0);
+
+    expectedClose = expectedClose + totalIn - totalOut - unplanned - debtorLentFromAccount + debtorReceivedToAccount;
     const usingActuals = hasAnyActual;
     const actual = balances[mo];
     const variance = actual != null ? actual - expectedClose : null;
