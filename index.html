@@ -350,9 +350,9 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 <!-- ACCOUNT -->
 <div class="page" id="page-account">
   <div class="ob-card">
-    <div class="ob-lbl">Opening Balance — Mar 1, 2026 (AED)</div>
+    <div class="ob-lbl" id="obLabel">Opening Balance — Mar 2026 (AED)</div>
     <input type="number" class="ob-input" id="openingBal" placeholder="0.00" inputmode="decimal" oninput="saveOB();renderAccount()">
-    <div class="ob-note">Enter your account balance as of March 1st</div>
+    <div class="ob-note">Enter your account balance at the start of <span id="obMonthNote">March 2026</span></div>
   </div>
   <div class="sec-lbl">Monthly Balance Tracker</div>
   <div class="card" id="accountTable"></div>
@@ -569,8 +569,19 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
 <script>
 // ── DATA ────────────────────────────────────────────────────────
 const MONTHS = ["Mar 2026", "Apr 2026", "May 2026", "Jun 2026", "Jul 2026", "Aug 2026", "Sep 2026", "Oct 2026", "Nov 2026", "Dec 2026"];
-const CATS = ["Primary Salary", "Secondary Income", "H-Topup Allowance", "Rent", "Food", "Shopping & Entertainment", "Transport & Utilities", "Remittance to India", "Chit Fund 1", "Chit Fund 2", "Card B Payment", "Card A Payment", "Card B Spend", "Card A Spend", "Emergency Buffer", "Wedding Fund", "H-Topup Expense", "Unplanned Expenses", "Debtor Lending", "Debtor Repayment"];
-const PLAN = {"Mar 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Apr 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"May 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Jun 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 3000, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Jul 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Aug 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 3000, 'Emergency Buffer': 500, 'Wedding Fund': 4000, 'H-Topup Expense': 280},"Sep 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280},"Oct 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280},"Nov 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280},"Dec 2026":{'Primary Salary': 16000, 'Secondary Income': 833, 'H-Topup Allowance': 280, 'Rent': 1100, 'Food': 1000, 'Shopping & Entertainment': 1000, 'Transport & Utilities': 1000, 'Remittance to India': 816.33, 'Chit Fund 1': 408.16, 'Chit Fund 2': 408.16, 'Card B Payment': 0, 'Card A Payment': 0, 'Emergency Buffer': 0, 'Wedding Fund': 10000, 'H-Topup Expense': 280}};
+const CATS = ["Primary Salary", "Secondary Income", "H-Topup Allowance", "Rent", "Food", "Shopping & Entertainment", "Transport & Utilities", "Remittance to India", "Chit Fund 1", "Chit Fund 2", "Card B Payment", "Card A Payment", "Card B Spend", "Card A Spend", "Emergency Buffer", "Wedding Fund", "H-Topup Expense", "Unplanned Expenses", "Loan EMI", "Debtor Lending", "Debtor Repayment"];
+const PLAN = {
+"Mar 2026":{'Primary Salary':16000,'Secondary Income':833,'H-Topup Allowance':280,'Rent':1100,'Food':1000,'Shopping & Entertainment':1000,'Transport & Utilities':1500,'Remittance to India':816,'Chit Fund 1':408,'Chit Fund 2':408,'Card B Payment':3000,'Card A Payment':3000,'Loan EMI':0,'Emergency Buffer':500,'Wedding Fund':4000,'H-Topup Expense':280},
+"Apr 2026":{'Primary Salary':16000,'Secondary Income':833,'H-Topup Allowance':280,'Rent':1100,'Food':1000,'Shopping & Entertainment':1000,'Transport & Utilities':1500,'Remittance to India':816,'Chit Fund 1':408,'Chit Fund 2':408,'Card B Payment':0,'Card A Payment':0,'Loan EMI':0,'Emergency Buffer':500,'Wedding Fund':4000,'H-Topup Expense':280},
+"May 2026":{'Primary Salary':16000,'Secondary Income':0,'H-Topup Allowance':0,'Rent':1100,'Food':1000,'Shopping & Entertainment':500,'Transport & Utilities':790,'Remittance to India':816,'Chit Fund 1':408,'Chit Fund 2':408,'Card B Payment':0,'Card A Payment':0,'Loan EMI':0,'Emergency Buffer':0,'Wedding Fund':5028,'H-Topup Expense':0},
+"Jun 2026":{'Primary Salary':16000,'Secondary Income':833,'H-Topup Allowance':280,'Rent':1100,'Food':1000,'Shopping & Entertainment':500,'Transport & Utilities':790,'Remittance to India':816,'Chit Fund 1':408,'Chit Fund 2':408,'Card B Payment':0,'Card A Payment':0,'Loan EMI':2061,'Emergency Buffer':0,'Wedding Fund':10250,'H-Topup Expense':280},
+"Jul 2026":{'Primary Salary':16000,'Secondary Income':833,'H-Topup Allowance':280,'Rent':1100,'Food':1000,'Shopping & Entertainment':500,'Transport & Utilities':790,'Remittance to India':816,'Chit Fund 1':408,'Chit Fund 2':408,'Card B Payment':0,'Card A Payment':0,'Loan EMI':2061,'Emergency Buffer':0,'Wedding Fund':10250,'H-Topup Expense':280},
+"Aug 2026":{'Primary Salary':16000,'Secondary Income':833,'H-Topup Allowance':280,'Rent':1100,'Food':1000,'Shopping & Entertainment':500,'Transport & Utilities':790,'Remittance to India':816,'Chit Fund 1':408,'Chit Fund 2':408,'Card B Payment':0,'Card A Payment':0,'Loan EMI':2061,'Emergency Buffer':0,'Wedding Fund':10250,'H-Topup Expense':280},
+"Sep 2026":{'Primary Salary':16000,'Secondary Income':833,'H-Topup Allowance':280,'Rent':1100,'Food':1000,'Shopping & Entertainment':500,'Transport & Utilities':790,'Remittance to India':816,'Chit Fund 1':408,'Chit Fund 2':408,'Card B Payment':0,'Card A Payment':0,'Loan EMI':2061,'Emergency Buffer':0,'Wedding Fund':10000,'H-Topup Expense':280},
+"Oct 2026":{'Primary Salary':16000,'Secondary Income':833,'H-Topup Allowance':280,'Rent':1100,'Food':1000,'Shopping & Entertainment':500,'Transport & Utilities':790,'Remittance to India':816,'Chit Fund 1':408,'Chit Fund 2':408,'Card B Payment':0,'Card A Payment':0,'Loan EMI':2061,'Emergency Buffer':0,'Wedding Fund':10000,'H-Topup Expense':280},
+"Nov 2026":{'Primary Salary':16000,'Secondary Income':833,'H-Topup Allowance':280,'Rent':1100,'Food':1000,'Shopping & Entertainment':500,'Transport & Utilities':790,'Remittance to India':816,'Chit Fund 1':408,'Chit Fund 2':408,'Card B Payment':0,'Card A Payment':0,'Loan EMI':2061,'Emergency Buffer':0,'Wedding Fund':6587,'H-Topup Expense':280},
+"Dec 2026":{'Primary Salary':16000,'Secondary Income':833,'H-Topup Allowance':280,'Rent':1100,'Food':1000,'Shopping & Entertainment':500,'Transport & Utilities':790,'Remittance to India':816,'Chit Fund 1':408,'Chit Fund 2':408,'Card B Payment':0,'Card A Payment':0,'Loan EMI':2061,'Emergency Buffer':0,'Wedding Fund':0,'H-Topup Expense':280}
+};
 const FOREX = 24.5;
 const INCOME_CATS = ["Primary Salary","Secondary Income","H-Topup Allowance"];
 const DEBT_CATS   = ["Card B Payment","Card A Payment"];
@@ -582,6 +593,7 @@ let selMonth = 0;
 let entries  = JSON.parse(localStorage.getItem('bgt_entries') || '[]');
 let balances = JSON.parse(localStorage.getItem('bgt_balances') || '{}');
 let openingBal = parseFloat(localStorage.getItem('bgt_ob') || '0');
+let obMap = JSON.parse(localStorage.getItem('bgt_ob_map') || '{}');
 let ccOpeningBal = JSON.parse(localStorage.getItem('bgt_ccob') || '{"B":15000,"A":20000}');
 let transfers = JSON.parse(localStorage.getItem('bgt_transfers') || '[]');
 let debtors = JSON.parse(localStorage.getItem('bgt_debtors') || '[]');
@@ -616,7 +628,7 @@ function getPlanTotals(mo) {
   const income  = p["Primary Salary"] + p["Secondary Income"] + p["H-Topup Allowance"];
   const living  = p["Rent"]+p["Food"]+p["Shopping & Entertainment"]+p["Transport & Utilities"]+p["Remittance to India"]+p["Chit Fund 1"]+p["Chit Fund 2"];
   const htopup  = p["H-Topup Expense"];
-  const debt    = p["Card B Payment"] + p["Card A Payment"];
+  const debt    = p["Card B Payment"] + p["Card A Payment"] + (p["Loan EMI"]||0);
   const savings = p["Emergency Buffer"] + p["Wedding Fund"];
   const net     = income - living - htopup - debt - savings;
   return {income, living, htopup, debt, savings, net};
@@ -627,7 +639,7 @@ function getActualTotals(monthLabel) {
   const income  = INCOME_CATS.reduce((s,c)=>s+a[c],0);
   const living  = ["Rent","Food","Shopping & Entertainment","Transport & Utilities","Remittance to India","Chit Fund 1","Chit Fund 2"].reduce((s,c)=>s+a[c],0);
   const htopup  = a["H-Topup Expense"] || 0;
-  const debt    = DEBT_CATS.reduce((s,c)=>s+a[c],0);
+  const debt    = DEBT_CATS.reduce((s,c)=>s+a[c],0) + (a["Loan EMI"]||0);
   const savings = SAVE_CATS.reduce((s,c)=>s+a[c],0);
   const unplanned = (a["Unplanned Expenses"]||0) + (a["Card B Spend"]||0) + (a["Card A Spend"]||0) + (a["Debtor Lending"]||0);
   const debtorRepay = a["Debtor Repayment"]||0;
@@ -697,6 +709,17 @@ function selectMonth(idx) {
     p.classList.toggle('active', i===idx);
   });
   document.getElementById('activeBadge').textContent = MONTHS[idx].toUpperCase();
+  // Update opening balance field for selected month
+  const obMapLocal = JSON.parse(localStorage.getItem('bgt_ob_map') || '{}');
+  const obVal = obMapLocal[idx] || '';
+  const obInp = document.getElementById('openingBal');
+  if(obInp) obInp.value = obVal;
+  openingBal = parseFloat(obVal) || 0;
+  // Update label
+  const lbl = document.getElementById('obLabel');
+  const note = document.getElementById('obMonthNote');
+  if(lbl) lbl.textContent = 'Opening Balance — ' + MONTHS[idx] + ' (AED)';
+  if(note) note.textContent = MONTHS[idx];
   renderOverview();
   renderBreakdown();
   renderGoals();
@@ -821,7 +844,7 @@ function renderBreakdown() {
      totalLabel:'TOTAL LIVING', cls:'r'},
     {label:'🏥 H-TOPUP', cats:['H-Topup Expense'],
      totalLabel:'H-TOPUP SPEND', cls:'pu', note:'AED 280 in / AED 280 out — net zero'},
-    {label:'💳 DEBT REPAYMENT', cats:['Card B Payment','Card A Payment'],
+    {label:'💳 DEBT REPAYMENT', cats:['Card B Payment','Card A Payment','Loan EMI'],
      totalLabel:'TOTAL DEBT', cls:'o'},
     {label:'🎯 SAVINGS & GOALS', cats:['Emergency Buffer','Wedding Fund'],
      totalLabel:'TOTAL SAVINGS', cls:'t'},
@@ -1065,7 +1088,11 @@ function renderLog() {
 // ── ACCOUNT ─────────────────────────────────────────────────────
 function saveOB() {
   openingBal = parseFloat(document.getElementById('openingBal').value) || 0;
-  localStorage.setItem('bgt_ob', openingBal);
+  // Store per-month opening balance
+  const obMap = JSON.parse(localStorage.getItem('bgt_ob_map') || '{}');
+  obMap[selMonth] = openingBal;
+  localStorage.setItem('bgt_ob_map', JSON.stringify(obMap));
+  localStorage.setItem('bgt_ob', openingBal); // keep legacy
 }
 
 function saveActualBal(mo, val) {
@@ -1093,7 +1120,7 @@ function renderAccount() {
     // Expenses: use actual if logged for that category, else plan
     const expCats = ["Rent","Food","Shopping & Entertainment","Transport & Utilities",
                      "Remittance to India","Chit Fund 1","Chit Fund 2",
-                     "Card B Payment","Card A Payment",
+                     "Card B Payment","Card A Payment","Loan EMI",
                      "Emergency Buffer","Wedding Fund","H-Topup Expense"];
     const totalOut = expCats.reduce((s,c) => {
       return s + (hasAnyActual && a[c] > 0 ? a[c] : p[c]||0);
@@ -1563,7 +1590,7 @@ function clearData() {
   entries=[]; balances={}; chitWins=[]; ccOpeningBal={"B":15000,"A":20000}; transfers=[]; debtors=[]; debtorTxs=[];
   localStorage.removeItem('bgt_entries'); localStorage.removeItem('bgt_balances');
   localStorage.removeItem('bgt_ob'); localStorage.removeItem('bgt_chitwins');
-  localStorage.removeItem('bgt_ccob'); localStorage.removeItem('bgt_transfers'); localStorage.removeItem('bgt_debtors'); localStorage.removeItem('bgt_debtortxs');
+  localStorage.removeItem('bgt_ccob'); localStorage.removeItem('bgt_transfers'); localStorage.removeItem('bgt_debtors'); localStorage.removeItem('bgt_debtortxs'); localStorage.removeItem('bgt_ob_map');
   document.getElementById('openingBal').value=''; openingBal=0;
   renderLog(); renderOverview(); renderBreakdown(); renderGoals(); renderAccount(); renderChitWinHistory(); renderXferHistory(); renderDebtorSummary(); populateDebtorSelect();
   alert('All data cleared.');
