@@ -314,7 +314,7 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
     <canvas class="chart-canvas" id="wedChart" height="180"></canvas>
   </div>
   <div class="chart-wrap">
-    <div class="chart-title">Debt Clearance Progress</div>
+    <div class="chart-title">Loan EMI Remaining Balance</div>
     <canvas class="chart-canvas" id="debtChart" height="180"></canvas>
   </div>
 </div>
@@ -405,10 +405,14 @@ body{padding-bottom:calc(72px + var(--safe-bot))}
     <div class="card-hdr"><div class="card-title">↔ Lend / Receive from Debtor</div></div>
     <div class="card-body">
       <div class="form-group">
-        <div class="form-lbl">Type</div>
+        <div class="form-lbl">Transaction Type</div>
         <select class="form-input" id="debtorTxType" onchange="toggleDebtorTxFields()">
-          <option value="lend">Lend Money (from my fund → debtor)</option>
+          <option value="lend">Lend Money (my fund → debtor)</option>
           <option value="receive">Receive Repayment (debtor → my fund)</option>
+          <option value="debtor_to_main">Debtor Pays → Main Account</option>
+          <option value="debtor_to_wedding">Debtor Pays → Wedding Fund</option>
+          <option value="main_to_wedding">Main Account → Wedding Fund</option>
+          <option value="wedding_to_main">Wedding Fund → Main Account</option>
         </select>
       </div>
       <div class="form-group">
@@ -778,22 +782,19 @@ function renderOverview() {
 
   // Mini goals
   const cum = getCumActuals(selMonth);
-  const cbOB2=ccOpeningBal.B||15000, caOB2=ccOpeningBal.A||20000;
-  const cbBal2=Math.max(0,cbOB2-(cum["Card B Payment"]||0)+(cum["Card B Spend"]||0));
-  const caBal2=Math.max(0,caOB2-(cum["Card A Payment"]||0)+(cum["Card A Spend"]||0));
-  const debtCleared=(cbOB2-cbBal2)+(caOB2-caBal2);
-  const totalDebt=cbOB2+caOB2;
+  const loanPaid = cum["Loan EMI"]||0;
+  const loanTotal2 = 44475;
+  const loanPct = Math.min(100, Math.round(loanPaid/loanTotal2*100));
   const wedSaved = cum["Wedding Fund"]||0;
-  const debtPct = Math.min(100, Math.round(debtCleared/totalDebt*100));
   const wedPct = Math.min(100, Math.round(wedSaved/640));
   document.getElementById('miniGoals').innerHTML = `
     <div class="prog-card">
       <div class="prog-top">
-        <div><div class="prog-name">Debt Cleared</div><div class="prog-sub">AED ${fmt(debtCleared)} of ${fmt(totalDebt)}</div></div>
-        <div class="prog-pct" style="color:var(--orange)">${debtPct}%</div>
+        <div><div class="prog-name">Loan Repaid</div><div class="prog-sub">AED ${fmt(loanPaid)} of 44,475 · Ends Apr 2028</div></div>
+        <div class="prog-pct" style="color:var(--orange)">${loanPct}%</div>
       </div>
-      <div class="prog-bg"><div class="prog-fill debt" style="width:${debtPct}%"></div></div>
-      <div class="prog-nums"><span>AED ${fmt(debtCleared)} cleared</span><span>AED ${fmt(totalDebt)}</span></div>
+      <div class="prog-bg"><div class="prog-fill debt" style="width:${loanPct}%"></div></div>
+      <div class="prog-nums"><span>AED ${fmt(loanPaid)} paid</span><span>AED 44,475</span></div>
     </div>
     <div class="prog-card">
       <div class="prog-top">
@@ -911,34 +912,34 @@ function renderGoals() {
     cumPlanCA+=p["Card A Payment"];
   }
 
-  const cbOB=ccOpeningBal.B||15000, caOB=ccOpeningBal.A||20000;
-  const cbInp=document.getElementById('cbOB'), caInp=document.getElementById('caOB');
-  if(cbInp&&!cbInp.value) cbInp.value=cbOB;
-  if(caInp&&!caInp.value) caInp.value=caOB;
-  const cbBal=Math.max(0,cbOB-(cum["Card B Payment"]||0)+(cum["Card B Spend"]||0));
-  const caBal=Math.max(0,caOB-(cum["Card A Payment"]||0)+(cum["Card A Spend"]||0));
-  const cbPct=Math.min(100,Math.round((cbOB-cbBal)/cbOB*100));
-  const caPct=Math.min(100,Math.round((caOB-caBal)/caOB*100));
-  const cbNote=(cum["Card B Spend"]||0)>0?' · +AED '+fmt(cum["Card B Spend"])+' spend':'';
-  const caNote=(cum["Card A Spend"]||0)>0?' · +AED '+fmt(cum["Card A Spend"])+' spend':'';
+  // Cards cleared via loan — show as 100% cleared
   document.getElementById('ccGoals').innerHTML = `
     <div class="prog-card">
       <div class="prog-top">
-        <div><div class="prog-name">Card B — Opening: AED ${fmt(cbOB)}</div>
-        <div class="prog-sub">Paid: AED ${fmt(cum["Card B Payment"]||0)}${cbNote} · Balance: AED ${fmt(cbBal)}</div></div>
-        <div class="prog-pct" style="color:var(--orange)">${cbPct}%</div>
+        <div><div class="prog-name">Card 1 (ENBD) — AED 15,163</div>
+        <div class="prog-sub">Cleared via loan in April 2026 ✅</div></div>
+        <div class="prog-pct" style="color:var(--green)">100%</div>
       </div>
-      <div class="prog-bg"><div class="prog-fill debt" style="width:${cbPct}%"></div></div>
-      <div class="prog-nums"><span>AED ${fmt(cbOB-cbBal)} cleared</span><span>AED ${fmt(cbOB)}</span></div>
+      <div class="prog-bg"><div class="prog-fill debt" style="width:100%;background:linear-gradient(90deg,#4ade80,#2dd4bf)"></div></div>
+      <div class="prog-nums"><span>AED 15,163 cleared</span><span>AED 15,163</span></div>
     </div>
     <div class="prog-card">
       <div class="prog-top">
-        <div><div class="prog-name">Card A — Opening: AED ${fmt(caOB)}</div>
-        <div class="prog-sub">Paid: AED ${fmt(cum["Card A Payment"]||0)}${caNote} · Balance: AED ${fmt(caBal)}</div></div>
-        <div class="prog-pct" style="color:var(--orange)">${caPct}%</div>
+        <div><div class="prog-name">Card 2 — AED 13,800</div>
+        <div class="prog-sub">Cleared via loan in April 2026 ✅</div></div>
+        <div class="prog-pct" style="color:var(--green)">100%</div>
       </div>
-      <div class="prog-bg"><div class="prog-fill debt" style="width:${caPct}%"></div></div>
-      <div class="prog-nums"><span>AED ${fmt(caOB-caBal)} cleared</span><span>AED ${fmt(caOB)}</span></div>
+      <div class="prog-bg"><div class="prog-fill debt" style="width:100%;background:linear-gradient(90deg,#4ade80,#2dd4bf)"></div></div>
+      <div class="prog-nums"><span>AED 13,800 cleared</span><span>AED 13,800</span></div>
+    </div>
+    <div class="prog-card">
+      <div class="prog-top">
+        <div><div class="prog-name">Loan EMI — AED 44,475</div>
+        <div class="prog-sub">AED 2,061/month · Ends April 2028</div></div>
+        <div class="prog-pct" style="color:var(--orange)">${Math.round((cum["Loan EMI"]||0)/44475*100)}%</div>
+      </div>
+      <div class="prog-bg"><div class="prog-fill debt" style="width:${Math.min(100,Math.round((cum["Loan EMI"]||0)/44475*100))}%"></div></div>
+      <div class="prog-nums"><span>AED ${fmt(cum["Loan EMI"]||0)} paid</span><span>AED 44,475</span></div>
     </div>`;
 
   const wedSaved = cum["Wedding Fund"]||0;
@@ -993,25 +994,26 @@ function renderGoals() {
     }
   });
 
-  // Debt chart
+  // Loan EMI remaining chart
   if(charts.debt) charts.debt.destroy();
-  const debtPlanCum=[], debtActCum=[];
-  const cbOB3=ccOpeningBal.B||15000, caOB3=ccOpeningBal.A||20000;
-  let dp=cbOB3+caOB3, da=cbOB3+caOB3, hasAnyDebt=false;
+  const loanTotal = 44475;
+  const loanMonths = 24;
+  const loanEMI = 2061;
+  const loanPlanRem=[], loanActRem=[];
+  let lp = loanTotal, la = loanTotal, hasAnyEMI = false;
   MONTHS.forEach((m,i)=>{
     const p=PLAN[m]; const a=getActuals(m);
-    dp -= p["Card B Payment"]+p["Card A Payment"];
-    const actPay=(a["Card B Payment"]||0)+(a["Card A Payment"]||0);
-    const actSpend=(a["Card B Spend"]||0)+(a["Card A Spend"]||0);
-    if(actPay>0||actSpend>0){hasAnyDebt=true; da=da-actPay+actSpend;}
-    debtPlanCum.push(Math.max(0,Math.round(dp)));
-    debtActCum.push(hasAnyDebt?Math.max(0,Math.round(da)):null);
+    lp = Math.max(0, lp - (p["Loan EMI"]||0));
+    const actEMI = a["Loan EMI"]||0;
+    if(actEMI>0){hasAnyEMI=true; la=Math.max(0,la-actEMI);}
+    loanPlanRem.push(Math.round(lp));
+    loanActRem.push(hasAnyEMI?Math.round(la):null);
   });
   charts.debt = new Chart(document.getElementById('debtChart').getContext('2d'),{
     type:'line',
     data:{labels:MONTHS.map(m=>m.split(' ')[0]),datasets:[
-      {label:'Plan Balance',data:debtPlanCum,borderColor:'rgba(248,113,113,.8)',backgroundColor:'rgba(248,113,113,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(248,113,113,1)'},
-      {label:'Actual Balance',data:debtActCum,borderColor:'rgba(251,146,60,.8)',backgroundColor:'rgba(251,146,60,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(251,146,60,1)',spanGaps:true},
+      {label:'Plan Remaining',data:loanPlanRem,borderColor:'rgba(248,113,113,.8)',backgroundColor:'rgba(248,113,113,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(248,113,113,1)'},
+      {label:'Actual Remaining',data:loanActRem,borderColor:'rgba(251,146,60,.8)',backgroundColor:'rgba(251,146,60,.1)',fill:true,tension:.4,borderWidth:2,pointRadius:4,pointBackgroundColor:'rgba(251,146,60,1)',spanGaps:true},
     ]},
     options:{responsive:true,maintainAspectRatio:false,
       plugins:{legend:{labels:{color:'#8892aa',font:{size:10}}}},
@@ -1188,11 +1190,11 @@ function renderAccount() {
 // CF2: Started Feb 2026, 1 month done (Feb). Mar 2026 = month 2 of 20
 const CHIT_INFO = [
   {name:'Chit Fund 1', started:'Dec 2025', dur:30, ends:'May 2028',
-   moStart:5, totalMonths:30, paid:4,
-   catKey:'Chit Fund 1', note:'4 months paid (Dec 25, Jan 26, Feb 26, Mar 26)'},
-  {name:'Chit Fund 2', started:'Jan 2026', dur:30, ends:'Jun 2028',
-   moStart:3, totalMonths:30, paid:2,
-   catKey:'Chit Fund 2', note:'2 months paid (Jan 26, Feb 26)'},
+   moStart:6, totalMonths:30, paid:5,
+   catKey:'Chit Fund 1', note:'5 months paid (Dec 25, Jan–Apr 26)'},
+  {name:'Chit Fund 2', started:'Jan 2026', dur:20, ends:'Aug 2027',
+   moStart:4, totalMonths:20, paid:3,
+   catKey:'Chit Fund 2', note:'3 months paid (Jan–Mar 26)'},
 ];
 
 let chitWins = JSON.parse(localStorage.getItem('bgt_chitwins') || '[]');
@@ -1242,17 +1244,19 @@ function renderChitChart() {
   const cf2Logged = entries.filter(e=>e.cat==='Chit Fund 2').length;
   const cf1Done = CHIT_INFO[0].paid + cf1Logged;
   const cf2Done = CHIT_INFO[1].paid + cf2Logged;
+  const cf1Total = CHIT_INFO[0].totalMonths;
+  const cf2Total = CHIT_INFO[1].totalMonths;
   charts.chit = new Chart(ctx, {
     type: 'bar',
     data: {
       labels: [
-        'CF1 — Month '+cf1Done+' of 30',
-        'CF2 — Month '+cf2Done+' of 20'
+        'CF1 — Month '+cf1Done+' of '+cf1Total,
+        'CF2 — Month '+cf2Done+' of '+cf2Total
       ],
       datasets: [
         {label:'Months Paid', data:[cf1Done, cf2Done],
          backgroundColor:'rgba(45,212,191,.7)', borderColor:'rgba(45,212,191,1)', borderWidth:1, borderRadius:6},
-        {label:'Months Remaining', data:[30-cf1Done, 20-cf2Done],
+        {label:'Months Remaining', data:[cf1Total-cf1Done, cf2Total-cf2Done],
          backgroundColor:'rgba(255,255,255,.08)', borderColor:'rgba(255,255,255,.2)', borderWidth:1, borderRadius:6},
       ]
     },
@@ -1261,7 +1265,7 @@ function renderChitChart() {
       indexAxis:'y',
       plugins:{legend:{labels:{color:'#8892aa',font:{size:10}}}},
       scales:{
-        x:{stacked:true, ticks:{color:'#8892aa',font:{size:10}}, grid:{color:'rgba(255,255,255,.05)'}, max:30},
+        x:{stacked:true, ticks:{color:'#8892aa',font:{size:10}}, grid:{color:'rgba(255,255,255,.05)'}, max:Math.max(cf1Total,cf2Total)},
         y:{stacked:true, ticks:{color:'#8892aa',font:{size:10}}, grid:{color:'rgba(255,255,255,.05)'}}
       }
     }
@@ -1746,8 +1750,12 @@ function populateDebtorSelect() {
 
 function toggleDebtorTxFields() {
   const type = document.getElementById('debtorTxType').value;
-  document.getElementById('debtorFromGroup').style.display = type==='lend'?'block':'none';
-  document.getElementById('debtorToGroup').style.display   = type==='receive'?'block':'none';
+  const needsDebtor = ['lend','receive','debtor_to_main','debtor_to_wedding'].includes(type);
+  const needsFrom   = type==='lend';
+  const needsTo     = type==='receive';
+  document.getElementById('debtorTxPerson').parentElement.style.display = needsDebtor?'block':'none';
+  document.getElementById('debtorFromGroup').style.display = needsFrom?'block':'none';
+  document.getElementById('debtorToGroup').style.display   = needsTo?'block':'none';
 }
 
 function updateDebtorAED() {
@@ -1769,48 +1777,58 @@ function recordDebtorTx() {
   const amt     = parseFloat(document.getElementById('debtorAmt').value);
   const date    = document.getElementById('debtorDate').value;
   const note    = document.getElementById('debtorTxNote').value.trim();
-  const fund    = type==='lend'
-    ? document.getElementById('debtorFromFund').value
-    : document.getElementById('debtorToFund').value;
 
-  if (!debtor) { alert('Please select a debtor. Create one first if needed.'); return; }
+  const needsDebtor = ['lend','receive','debtor_to_main','debtor_to_wedding'].includes(type);
+  if (needsDebtor && !debtor) { alert('Please select a debtor.'); return; }
   if (!amt||amt<=0) { alert('Please enter a valid amount.'); return; }
   if (!date) { alert('Please select a date.'); return; }
 
   const aedAmt = currency==='INR' ? Math.round(amt/FOREX) : amt;
   const month  = entryMonth(date);
   const idBase = Date.now();
+  const logEntries = [];
 
-  // Record debtor transaction
-  debtorTxs.unshift({ id:idBase, type, debtor, currency, amt, aedAmt, fund, date, note, month });
+  if (type==='lend') {
+    const fund = document.getElementById('debtorFromFund').value;
+    debtorTxs.unshift({id:idBase,type:'lend',debtor,currency,amt,aedAmt,fund,date,note,month});
+    logEntries.push({id:idBase+1,date,desc:'Lent to '+debtor+(note?' — '+note:''),cat:'Debtor Lending',amt:aedAmt,month});
+
+  } else if (type==='receive') {
+    const fund = document.getElementById('debtorToFund').value;
+    debtorTxs.unshift({id:idBase,type:'receive',debtor,currency,amt,aedAmt,fund,date,note,month});
+    logEntries.push({id:idBase+1,date,desc:'Received from '+debtor+(note?' — '+note:''),cat:'Debtor Repayment',amt:aedAmt,month});
+
+  } else if (type==='debtor_to_main') {
+    // Debtor pays → Main Account. Reduces debtor balance, increases account
+    debtorTxs.unshift({id:idBase,type:'receive',debtor,currency,amt,aedAmt,fund:'Main Account',date,note:note||'Paid to Main Account',month});
+    logEntries.push({id:idBase+1,date,desc:'Debtor '+debtor+' paid Main Account'+(note?' — '+note:''),cat:'Debtor Repayment',amt:aedAmt,month});
+
+  } else if (type==='debtor_to_wedding') {
+    // Debtor pays → Wedding Fund. Reduces debtor balance, increases wedding fund
+    debtorTxs.unshift({id:idBase,type:'receive',debtor,currency,amt,aedAmt,fund:'Wedding Fund',date,note:note||'Paid to Wedding Fund',month});
+    logEntries.push({id:idBase+1,date,desc:'Debtor '+debtor+' paid Wedding Fund'+(note?' — '+note:''),cat:'Wedding Fund',amt:aedAmt,month});
+
+  } else if (type==='main_to_wedding') {
+    // Main Account → Wedding Fund. Two log entries
+    logEntries.push({id:idBase,date,desc:'Transfer to Wedding Fund'+(note?' — '+note:''),cat:'Debtor Lending',amt:aedAmt,month});
+    logEntries.push({id:idBase+1,date,desc:'Transfer from Main Account'+(note?' — '+note:''),cat:'Wedding Fund',amt:aedAmt,month});
+
+  } else if (type==='wedding_to_main') {
+    // Wedding Fund → Main Account. Two log entries
+    logEntries.push({id:idBase,date,desc:'Transfer from Wedding Fund'+(note?' — '+note:''),cat:'Wedding Fund',amt:aedAmt,month});
+    logEntries.push({id:idBase+1,date,desc:'Transfer to Main Account'+(note?' — '+note:''),cat:'Debtor Repayment',amt:aedAmt,month});
+  }
+
   localStorage.setItem('bgt_debtortxs', JSON.stringify(debtorTxs));
-
-  // Create log entry — lend = deduction from fund, receive = addition to fund
-  const logCat  = fund;
-  const logDesc = type==='lend'
-    ? 'Lent to '+debtor+(note?' — '+note:'')
-    : 'Received from '+debtor+(note?' — '+note:'');
-
-  // For lend: shows as outflow (will appear as extra spend in that category)
-  // For receive: shows as inflow (negative spend = credit back)
-  // We create a special category "Debtor Lending" and "Debtor Repayment"
-  const logEntry = {
-    id: idBase+1,
-    date, desc: logDesc,
-    cat: type==='lend' ? 'Debtor Lending' : 'Debtor Repayment',
-    amt: aedAmt, month,
-    fund: fund, debtorRef: true
-  };
-  entries.unshift(logEntry);
+  logEntries.forEach(e=>entries.unshift(e));
   entries.sort((a,b)=>new Date(b.date)-new Date(a.date));
   save();
 
-  // Clear form
   document.getElementById('debtorAmt').value='';
   document.getElementById('debtorTxNote').value='';
 
   renderLog(); renderDebtorSummary(); renderOverview(); renderBreakdown(); renderGoals(); renderAccount();
-  alert('Recorded! AED '+fmt(aedAmt)+' '+(type==='lend'?'lent to':'received from')+' '+debtor);
+  alert('✅ Recorded! AED '+fmt(aedAmt)+' — '+type.replace(/_/g,' '));
 }
 
 function deleteDebtorTx(id) {
